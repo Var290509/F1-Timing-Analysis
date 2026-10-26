@@ -37,7 +37,19 @@
 
 ---
 
-### Slide 4: Data Architecture & NAB Telemetry Channel Mapping
+### Slide 4: Multi-Driver Race Timings & Grid Anomaly Analysis
+* **Beyond Single-Channel Telemetry: Full-Grid Race Timings:**
+  * Ingested 886,000+ official lap times covering all drivers in modern F1 history (up to raceId 1186: 2026 United States GP).
+  * Evaluates lap times, gaps to leader, intervals to car ahead, and pit stop durations for **every driver on the grid**.
+* **Real-Time Driver Timing Anomaly Detection:**
+  * **Pace Drop Spike Anomaly:** Flagging sudden lap time spikes $> +2.5\text{s}$ above rolling median (yellow flags, lockups, off-track excursions, front-wing endplate loss).
+  * **Tyre Thermal Degradation Cliff:** Detecting 3 consecutive laps slowing by $> +0.65\text{s}/\text{lap}$ $\to$ automated "Box Box" pit alert.
+  * **Pit Lane Transit Delay:** Identifying outlier pit stops $> 26.5\text{s}$ total ($> 3.5\text{s}$ stationary wheel change).
+  * **Intra-Team Performance Divergence:** Comparing teammates in identical machinery (e.g. Leclerc vs Hamilton, Norris vs Piastri) to detect hidden aerodynamic floor damage.
+
+---
+
+### Slide 5: Streaming Causal Windowed Feature Engineering
 * **Benchmark Dataset:** Numenta Anomaly Benchmark (NAB) — the premier international gold standard for streaming anomaly detection.
 * **F1 Domain Channel Mapping:**
   1. `TEL-ENG-01 (machine_temperature)` $\to$ Internal Combustion Engine (ICE) Coolant & Cylinder Head Temperature (°C).

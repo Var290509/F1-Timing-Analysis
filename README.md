@@ -11,6 +11,21 @@ In Grand Prix racing, telemetry streams (engine cylinder head temperatures, MGU-
 
 ---
 
+## ⏱️ Multi-Driver Race Timings & Grid Anomaly Analysis
+
+In addition to high-frequency sensor streams, F1 Sentinel features a full **Multi-Driver Race Timing Engine** ([`src/driver_timing_engine.py`](file:///d:/Uthkrista%20PS-2/src/driver_timing_engine.py)) ingesting **886,544 official lap time records** from 1996 through the latest 2026 Grand Prix:
+
+### Capabilities:
+* **Grid-Wide Timing Matrix**: Tracks lap time, cumulative race duration, gap to leader, interval to car ahead, and tyre stint degradation for all 22 drivers in the running race.
+* **Driver-Specific Timing Anomaly Detection**:
+  1. `PACE_DROP_SPIKE`: Sudden single-lap time drop ($> +2.5\text{s}$) due to off-track excursions, severe tyre lockups, or traffic blocks.
+  2. `TYRE_THERMAL_CLIFF`: Multi-lap degradation where a driver loses $> +0.65\text{s}/\text{lap}$ over 3 consecutive laps, triggering an automated pit wall *"Box Box"* alert.
+  3. `PIT_LANE_DELIVERY_DELAY`: Outlier pit stops exceeding the 23.5s transit target ($> 3.5\text{s}$ stationary wheel changes).
+  4. `OFF_TRACK_OR_COLLISION_DAMAGE`: Extreme lap time collapse ($> +5.0\text{s}$) on a clean track signaling floor or wing damage.
+* **Intra-Team Head-to-Head Benchmarking**: Lap-by-lap pace delta comparison between teammates driving identical machinery (e.g., Ferrari: Leclerc vs. Hamilton; McLaren: Norris vs. Piastri; Mercedes: Russell vs. Antonelli).
+
+---
+
 ## 🏛️ 1950–2026 Historical F1 Integration & Current Game Transformation
 
 To provide authentic motorsport depth, F1 Sentinel integrates the **canonical 1950–2026 Formula 1 World Championship historical database** (1,172 Grands Prix, 76 seasons, and 27,600+ race entries) sourced from the official F1 archive:

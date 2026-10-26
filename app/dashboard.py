@@ -29,6 +29,7 @@ from src.models.ensemble import HybridEnsembleDetector
 from src.adaptive_threshold import AdaptiveThresholdManager
 from src.evidence_generator import EvidenceGenerator
 from src.historical_engine import F1HistoricalEngine, F1_ERAS
+from src.driver_timing_engine import DriverTimingEngine
 
 
 # Page Configuration
@@ -224,6 +225,11 @@ def get_historical_engine():
     return F1HistoricalEngine()
 
 
+@st.cache_resource
+def get_driver_engine():
+    return DriverTimingEngine()
+
+
 def main():
     channels = get_available_channels()
     hist_engine = get_historical_engine()
@@ -234,7 +240,11 @@ def main():
         st.markdown("### 🎛️ Navigation & Control")
         app_mode = st.radio(
             "Dashboard View:",
-            options=["🏎️ Real-Time Telemetry Monitor", "🏛️ 1950–2026 Historical Evolution & Current Game"]
+            options=[
+                "🏎️ Real-Time Telemetry Monitor",
+                "⏱️ Multi-Driver Live Timing & Anomaly Matrix",
+                "🏛️ 1950–2026 Historical Evolution & Current Game"
+            ]
         )
 
         st.markdown("---")
@@ -496,7 +506,144 @@ def main():
             time.sleep(0.08)
             st.rerun()
 
-    # --- VIEW 2: 1950–2026 HISTORICAL EVOLUTION & CURRENT GAME TRANSFORMATION ---
+    # --- VIEW 2: MULTI-DRIVER LIVE TIMING & ANOMALY MATRIX ---
+    elif app_mode == "⏱️ Multi-Driver Live Timing & Anomaly Matrix":
+        driver_engine = get_driver_engine()
+        latest_id = driver_engine.get_latest_race_id()
+        race_info = driver_engine.get_race_info(latest_id)
+        grid_df = driver_engine.get_race_telemetry_grid(latest_id)
+        driver_summary = driver_engine.compute_driver_pace_summary(latest_id)
+        driver_anoms = driver_engine.detect_driver_timing_anomalies(latest_id)
+
+        st.markdown(f"""
+        <div class="f1-header">
+            <h1 class="f1-title">⏱️ MULTI-DRIVER LIVE TIMING & RACE ANOMALY MATRIX</h1>
+            <p class="f1-subtitle">SESSION: {race_info['year']} {race_info['name'].upper()} | ROUND {race_info['round']} | {len(driver_summary)} DRIVERS ANALYZED</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # KPI Row
+        d1, d2, d3, d4, d5 = st.columns(5)
+        with d1:
+            winner = driver_summary.iloc[0]["code"] if not driver_summary.empty else "P1"
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-val" style="color: #FFB800;">{winner}</div>
+                <div class="metric-lbl">Race Winner (P1)</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with d2:
+            fastest_row = driver_summary.sort_values("fastest_lap_sec").iloc[0] if not driver_summary.empty else None
+            fastest_str = f"{fastest_row['fastest_lap_str']} ({fastest_row['code']})" if fastest_row is not None else "1:37.9"
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-val" style="color: #00D2BE; font-size: 19px;">{fastest_str}</div>
+                <div class="metric-lbl">Fastest Race Lap</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with d3:
+            median_p = f"{driver_summary['median_pace_sec'].median():.2f}s" if not driver_summary.empty else "100.4s"
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-val" style="color: #3B82F6;">{median_p}</div>
+                <div class="metric-lbl">Grid Median Pace</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with d4:
+            total_anom = len(driver_anoms)
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-val" style="color: #E10600;">{total_anom}</div>
+                <div class="metric-lbl">Grid Timing Anomalies Flagged</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with d5:
+            max_laps = grid_df["lap"].max() if not grid_df.empty else 56
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-val" style="color: #FFFFFF;">{max_laps} Laps</div>
+                <div class="metric-lbl">Total Race Distance</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # Tabs for Timing Analysis
+        tab_board, tab_pace, tab_anom, tab_team = st.tabs([
+            "🏆 Official F1 Timing Leaderboard",
+            "📈 Multi-Driver Lap Pace Comparison",
+            "🚨 Grid Timing Anomalies Incident Log",
+            "⚔️ Intra-Team Head-to-Head Battle"
+        ])
+
+        with tab_board:
+            st.markdown("### 🏆 Race Classification & Driver Timing Summary")
+            st.markdown("Pace metrics, fastest laps, median race pace, and pit stop counts for every driver:")
+            st.dataframe(driver_summary, use_container_width=True)
+
+        with tab_pace:
+            st.markdown("### 📈 Driver Lap-by-Lap Pace & Stint Degradation")
+            driver_options = sorted(grid_df["code"].unique())
+            default_selection = [c for c in ["ANT", "LEC", "VER", "HAM", "NOR", "PIA"] if c in driver_options]
+            selected_drivers = st.multiselect(
+                "Select Drivers to Compare:",
+                options=driver_options,
+                default=default_selection
+            )
+
+            if selected_drivers:
+                sub_compare = grid_df[grid_df["code"].isin(selected_drivers)].copy()
+                chart_pace = alt.Chart(sub_compare).mark_line(strokeWidth=2.2).encode(
+                    x=alt.X("lap:Q", title="Lap Number"),
+                    y=alt.Y("lap_sec:Q", title="Lap Time (seconds)", scale=alt.Scale(domain=[95, 125])),
+                    color=alt.Color("code:N", title="Driver Code")
+                ).properties(height=380).configure_view(strokeWidth=0).configure_axis(
+                    gridColor="#2D2D3F",
+                    labelColor="#FFFFFF",
+                    titleColor="#FFFFFF"
+                )
+                st.altair_chart(chart_pace, use_container_width=True)
+
+            plot_pace_path = "outputs/plots/driver_lap_pace_comparison.png"
+            if os.path.exists(plot_pace_path):
+                st.image(plot_pace_path, use_container_width=True)
+
+        with tab_anom:
+            st.markdown(f"### 🚨 Grid Timing Anomalies ({len(driver_anoms)} Incidents Detected)")
+            st.markdown(
+                "Real-time timing anomalies across all drivers: sudden pace spikes, tyre degradation cliffs, "
+                "and pit lane transit delays with explainable diagnostic evidence."
+            )
+            st.dataframe(driver_anoms, use_container_width=True)
+
+            plot_scatter_path = "outputs/plots/driver_timing_anomalies_scatter.png"
+            if os.path.exists(plot_scatter_path):
+                st.image(plot_scatter_path, use_container_width=True)
+
+        with tab_team:
+            st.markdown("### ⚔️ Intra-Team Head-to-Head Performance Deltas")
+            st.markdown("Lap-by-lap comparison of teammates driving identical machinery to detect chassis or power-unit performance divergence:")
+            teammates_df = driver_engine.compare_teammates(latest_id)
+            if not teammates_df.empty:
+                teams_list = sorted(teammates_df["team"].unique())
+                selected_team = st.selectbox("Select Constructor Pairing:", options=teams_list)
+                team_sub = teammates_df[teammates_df["team"] == selected_team].sort_values("lap")
+                
+                chart_team = alt.Chart(team_sub).mark_line(color="#E10600", strokeWidth=2.0).encode(
+                    x=alt.X("lap:Q", title="Lap Number"),
+                    y=alt.Y("delta_d1_minus_d2:Q", title=f"Lap Delta: {team_sub['driver_1'].iloc[0]} vs {team_sub['driver_2'].iloc[0]} (s)", scale=alt.Scale(domain=[-5, 5]))
+                ).properties(height=320).configure_view(strokeWidth=0).configure_axis(
+                    gridColor="#2D2D3F",
+                    labelColor="#FFFFFF",
+                    titleColor="#FFFFFF"
+                )
+                st.altair_chart(chart_team, use_container_width=True)
+
+            plot_team_path = "outputs/plots/teammate_pace_deltas.png"
+            if os.path.exists(plot_team_path):
+                st.image(plot_team_path, use_container_width=True)
+
+    # --- VIEW 3: 1950–2026 HISTORICAL EVOLUTION & CURRENT GAME TRANSFORMATION ---
     else:
         st.markdown("""
         <div class="f1-header">

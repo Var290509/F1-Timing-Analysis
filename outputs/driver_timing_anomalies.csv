@@ -1,0 +1,92 @@
+driver_code,driver_name,team,lap,lap_time,lap_sec,anomaly_type,anomaly_score,evidence
+ANT,Andrea Kimi Antonelli,Mercedes,2,1:48.430,108.43,PACE_DROP_SPIKE,0.934,Lap time spiked +4.26s above driver median pace (104.17s); severe tyre lockup or traffic block.
+HAM,Lewis Hamilton,Ferrari,2,1:49.467,109.467,PACE_DROP_SPIKE,0.855,Lap time spiked +3.08s above driver median pace (106.39s); severe tyre lockup or traffic block.
+LEC,Charles Leclerc,Ferrari,2,1:48.941,108.941,PACE_DROP_SPIKE,0.854,Lap time spiked +3.07s above driver median pace (105.87s); severe tyre lockup or traffic block.
+VER,Max Verstappen,Red Bull,2,1:48.372,108.372,PACE_DROP_SPIKE,0.854,Lap time spiked +3.05s above driver median pace (105.32s); severe tyre lockup or traffic block.
+GAS,Pierre Gasly,Alpine F1 Team,2,1:53.200,113.2,PACE_DROP_SPIKE,0.849,Lap time spiked +2.99s above driver median pace (110.21s); severe tyre lockup or traffic block.
+HAD,Isack Hadjar,Red Bull,2,1:49.800,109.8,PACE_DROP_SPIKE,0.841,Lap time spiked +2.87s above driver median pace (106.93s); severe tyre lockup or traffic block.
+RUS,George Russell,Mercedes,2,1:49.912,109.912,PACE_DROP_SPIKE,0.819,Lap time spiked +2.53s above driver median pace (107.38s); severe tyre lockup or traffic block.
+BEA,Oliver Bearman,Haas F1 Team,12,1:46.078,106.078,TYRE_THERMAL_CLIFF,0.76,"Tyre degradation cliff confirmed: 3 consecutive laps slowed by +0.59s, +1.76s, +0.56s; Box Box alert."
+BEA,Oliver Bearman,Haas F1 Team,14,2:03.906,123.906,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.39s vs rolling median (105.52s); potential puncture or wing damage.
+VER,Max Verstappen,Red Bull,14,2:00.232,120.232,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.96s vs rolling median (101.27s); potential puncture or wing damage.
+HAM,Lewis Hamilton,Ferrari,15,2:00.726,120.726,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.05s vs rolling median (101.68s); potential puncture or wing damage.
+LEC,Charles Leclerc,Ferrari,16,2:00.887,120.887,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.24s vs rolling median (101.65s); potential puncture or wing damage.
+PIA,Oscar Piastri,McLaren,16,2:01.756,121.756,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.35s vs rolling median (102.41s); potential puncture or wing damage.
+STR,Lance Stroll,Aston Martin,16,2:02.464,122.464,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.40s vs rolling median (104.06s); potential puncture or wing damage.
+ALB,Alexander Albon,Williams,17,2:02.476,122.476,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.00s vs rolling median (104.48s); potential puncture or wing damage.
+NOR,Lando Norris,McLaren,17,2:02.726,122.726,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +20.68s vs rolling median (102.04s); potential puncture or wing damage.
+SAI,Carlos Sainz,Williams,17,1:44.765,104.765,PIT_LANE_DELIVERY_DELAY,1.0,Pit stop duration 33.69s exceeded 23.5s target by +10.19s; stationary wheel-change delay.
+SAI,Carlos Sainz,Williams,18,2:11.881,131.881,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +27.84s vs rolling median (104.04s); potential puncture or wing damage.
+LIN,Arvid Lindblad,RB F1 Team,19,2:02.113,122.113,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.71s vs rolling median (103.40s); potential puncture or wing damage.
+BEA,Oliver Bearman,Haas F1 Team,22,1:44.128,104.128,PIT_LANE_DELIVERY_DELAY,1.0,Pit stop duration 34.74s exceeded 23.5s target by +11.24s; stationary wheel-change delay.
+OCO,Esteban Ocon,Haas F1 Team,22,2:03.803,123.803,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.89s vs rolling median (103.91s); potential puncture or wing damage.
+RUS,George Russell,Mercedes,22,1:42.270,102.27,PIT_LANE_DELIVERY_DELAY,1.0,Pit stop duration 29.76s exceeded 23.5s target by +6.26s; stationary wheel-change delay.
+BEA,Oliver Bearman,Haas F1 Team,23,2:17.583,137.583,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +34.05s vs rolling median (103.54s); potential puncture or wing damage.
+RUS,George Russell,Mercedes,23,2:06.912,126.912,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +24.62s vs rolling median (102.29s); potential puncture or wing damage.
+BEA,Oliver Bearman,Haas F1 Team,24,1:52.122,112.122,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +7.99s vs rolling median (104.13s); potential puncture or wing damage.
+PER,Sergio Pérez,Cadillac,24,2:03.889,123.889,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.93s vs rolling median (103.96s); potential puncture or wing damage.
+GAS,Pierre Gasly,Alpine F1 Team,24,1:43.584,103.584,PIT_LANE_DELIVERY_DELAY,0.998,Pit stop duration 26.98s exceeded 23.5s target by +3.48s; stationary wheel-change delay.
+ANT,Andrea Kimi Antonelli,Mercedes,25,2:00.429,120.429,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.28s vs rolling median (101.15s); potential puncture or wing damage.
+COL,Franco Colapinto,Alpine F1 Team,25,1:49.234,109.234,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +6.50s vs rolling median (102.73s); potential puncture or wing damage.
+GAS,Pierre Gasly,Alpine F1 Team,25,2:05.122,125.122,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +22.22s vs rolling median (102.91s); potential puncture or wing damage.
+HAD,Isack Hadjar,Red Bull,26,2:04.210,124.21,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +21.78s vs rolling median (102.43s); potential puncture or wing damage.
+LAW,Liam Lawson,RB F1 Team,26,2:02.295,122.295,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.66s vs rolling median (102.63s); potential puncture or wing damage.
+BOR,Gabriel Bortoleto,Audi,27,2:01.831,121.831,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.18s vs rolling median (102.65s); potential puncture or wing damage.
+ALO,Fernando Alonso,Aston Martin,29,2:01.888,121.888,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.20s vs rolling median (102.68s); potential puncture or wing damage.
+PER,Sergio Pérez,Cadillac,29,1:45.428,105.428,PACE_DROP_SPIKE,0.839,Lap time spiked +2.83s above driver median pace (102.59s); severe tyre lockup or traffic block.
+BOT,Valtteri Bottas,Cadillac,30,2:03.984,123.984,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.82s vs rolling median (105.16s); potential puncture or wing damage.
+HUL,Nico Hülkenberg,Audi,30,2:01.714,121.714,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.04s vs rolling median (102.68s); potential puncture or wing damage.
+COL,Franco Colapinto,Alpine F1 Team,31,2:04.745,124.745,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +20.09s vs rolling median (104.65s); potential puncture or wing damage.
+ALB,Alexander Albon,Williams,32,2:03.185,123.185,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.61s vs rolling median (103.58s); potential puncture or wing damage.
+VER,Max Verstappen,Red Bull,32,2:00.106,120.106,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.80s vs rolling median (101.31s); potential puncture or wing damage.
+HAM,Lewis Hamilton,Ferrari,39,1:59.972,119.972,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.93s vs rolling median (101.04s); potential puncture or wing damage.
+SAI,Carlos Sainz,Williams,39,2:02.241,122.241,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +17.73s vs rolling median (104.51s); potential puncture or wing damage.
+LEC,Charles Leclerc,Ferrari,40,1:59.656,119.656,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.11s vs rolling median (100.55s); potential puncture or wing damage.
+LIN,Arvid Lindblad,RB F1 Team,41,2:00.781,120.781,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +18.92s vs rolling median (101.86s); potential puncture or wing damage.
+ALO,Fernando Alonso,Aston Martin,42,1:52.801,112.801,PIT_LANE_DELIVERY_DELAY,1.0,Pit stop duration 40.42s exceeded 23.5s target by +16.92s; stationary wheel-change delay.
+STR,Lance Stroll,Aston Martin,42,2:00.812,120.812,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +17.63s vs rolling median (103.18s); potential puncture or wing damage.
+ALO,Fernando Alonso,Aston Martin,43,2:19.838,139.838,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +38.05s vs rolling median (101.78s); potential puncture or wing damage.
+ALB,Alexander Albon,Williams,50,2:04.448,124.448,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +20.46s vs rolling median (103.98s); potential puncture or wing damage.
+ALO,Fernando Alonso,Aston Martin,50,2:03.274,123.274,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +21.61s vs rolling median (101.67s); potential puncture or wing damage.
+PER,Sergio Pérez,Cadillac,50,2:11.910,131.91,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +29.32s vs rolling median (102.59s); potential puncture or wing damage.
+SAI,Carlos Sainz,Williams,50,2:04.803,124.803,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +23.04s vs rolling median (101.76s); potential puncture or wing damage.
+STR,Lance Stroll,Aston Martin,50,2:00.135,120.135,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.03s vs rolling median (101.10s); potential puncture or wing damage.
+OCO,Esteban Ocon,Haas F1 Team,50,1:47.085,107.085,PACE_DROP_SPIKE,0.977,Lap time spiked +4.90s above driver median pace (102.18s); severe tyre lockup or traffic block.
+LIN,Arvid Lindblad,RB F1 Team,50,1:44.488,104.488,PACE_DROP_SPIKE,0.925,Lap time spiked +4.13s above driver median pace (100.36s); severe tyre lockup or traffic block.
+ALB,Alexander Albon,Williams,51,2:17.004,137.004,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +32.02s vs rolling median (104.99s); potential puncture or wing damage.
+ALO,Fernando Alonso,Aston Martin,51,2:17.615,137.615,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +34.61s vs rolling median (103.01s); potential puncture or wing damage.
+BOR,Gabriel Bortoleto,Audi,51,2:34.525,154.525,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +52.21s vs rolling median (102.32s); potential puncture or wing damage.
+GAS,Pierre Gasly,Alpine F1 Team,51,2:13.137,133.137,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +32.10s vs rolling median (101.04s); potential puncture or wing damage.
+HAD,Isack Hadjar,Red Bull,51,1:54.830,114.83,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +15.00s vs rolling median (99.83s); potential puncture or wing damage.
+HAM,Lewis Hamilton,Ferrari,51,1:49.562,109.562,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +10.81s vs rolling median (98.76s); potential puncture or wing damage.
+HUL,Nico Hülkenberg,Audi,51,2:17.393,137.393,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +36.60s vs rolling median (100.80s); potential puncture or wing damage.
+LAW,Liam Lawson,RB F1 Team,51,2:10.992,130.992,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +29.94s vs rolling median (101.05s); potential puncture or wing damage.
+LEC,Charles Leclerc,Ferrari,51,1:49.632,109.632,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +10.45s vs rolling median (99.19s); potential puncture or wing damage.
+LIN,Arvid Lindblad,RB F1 Team,51,2:17.644,137.644,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.23s vs rolling median (100.42s); potential puncture or wing damage.
+NOR,Lando Norris,McLaren,51,1:52.982,112.982,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +11.89s vs rolling median (101.09s); potential puncture or wing damage.
+OCO,Esteban Ocon,Haas F1 Team,51,2:17.618,137.618,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +35.44s vs rolling median (102.18s); potential puncture or wing damage.
+PER,Sergio Pérez,Cadillac,51,2:13.786,133.786,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +30.97s vs rolling median (102.82s); potential puncture or wing damage.
+PIA,Oscar Piastri,McLaren,51,2:00.942,120.942,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +20.19s vs rolling median (100.75s); potential puncture or wing damage.
+RUS,George Russell,Mercedes,51,2:01.853,121.853,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +20.89s vs rolling median (100.97s); potential puncture or wing damage.
+SAI,Carlos Sainz,Williams,51,2:17.942,137.942,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +35.96s vs rolling median (101.98s); potential puncture or wing damage.
+STR,Lance Stroll,Aston Martin,51,2:18.187,138.187,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.09s vs rolling median (101.10s); potential puncture or wing damage.
+VER,Max Verstappen,Red Bull,51,1:49.491,109.491,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +9.79s vs rolling median (99.70s); potential puncture or wing damage.
+ANT,Andrea Kimi Antonelli,Mercedes,52,2:17.954,137.954,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +38.19s vs rolling median (99.77s); potential puncture or wing damage.
+BOR,Gabriel Bortoleto,Audi,52,2:02.288,122.288,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +19.97s vs rolling median (102.32s); potential puncture or wing damage.
+GAS,Pierre Gasly,Alpine F1 Team,52,2:14.140,134.14,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +32.97s vs rolling median (101.17s); potential puncture or wing damage.
+HAD,Isack Hadjar,Red Bull,52,2:17.233,137.233,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.40s vs rolling median (99.83s); potential puncture or wing damage.
+HAM,Lewis Hamilton,Ferrari,52,2:18.250,138.25,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +39.10s vs rolling median (99.15s); potential puncture or wing damage.
+HUL,Nico Hülkenberg,Audi,52,2:10.845,130.845,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +29.52s vs rolling median (101.32s); potential puncture or wing damage.
+LAW,Liam Lawson,RB F1 Team,52,2:16.331,136.331,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +35.00s vs rolling median (101.33s); potential puncture or wing damage.
+LEC,Charles Leclerc,Ferrari,52,2:16.880,136.88,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.69s vs rolling median (99.19s); potential puncture or wing damage.
+LIN,Arvid Lindblad,RB F1 Team,52,2:05.554,125.554,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +21.07s vs rolling median (104.49s); potential puncture or wing damage.
+NOR,Lando Norris,McLaren,52,2:18.306,138.306,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.21s vs rolling median (101.09s); potential puncture or wing damage.
+OCO,Esteban Ocon,Haas F1 Team,52,2:05.025,125.025,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +17.94s vs rolling median (107.08s); potential puncture or wing damage.
+PIA,Oscar Piastri,McLaren,52,2:17.883,137.883,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.13s vs rolling median (100.75s); potential puncture or wing damage.
+RUS,George Russell,Mercedes,52,2:18.683,138.683,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +37.64s vs rolling median (101.05s); potential puncture or wing damage.
+VER,Max Verstappen,Red Bull,52,2:16.661,136.661,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +36.34s vs rolling median (100.32s); potential puncture or wing damage.
+ANT,Andrea Kimi Antonelli,Mercedes,53,2:07.721,127.721,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +25.64s vs rolling median (102.08s); potential puncture or wing damage.
+HAM,Lewis Hamilton,Ferrari,53,1:58.733,118.733,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +9.17s vs rolling median (109.56s); potential puncture or wing damage.
+LEC,Charles Leclerc,Ferrari,53,2:01.598,121.598,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +11.97s vs rolling median (109.63s); potential puncture or wing damage.
+NOR,Lando Norris,McLaren,53,1:57.999,117.999,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +5.02s vs rolling median (112.98s); potential puncture or wing damage.
+VER,Max Verstappen,Red Bull,53,2:01.714,121.714,OFF_TRACK_OR_COLLISION_DAMAGE,1.0,Pace collapsed by +12.22s vs rolling median (109.49s); potential puncture or wing damage.

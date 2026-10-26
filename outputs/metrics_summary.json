@@ -25,7 +25,7 @@
       "TP": 2,
       "FP": 8,
       "FN": 2,
-      "Inference Latency (ms)": 0.661
+      "Inference Latency (ms)": 4.815
     },
     {
       "Model": "Hybrid_Ensemble",
@@ -49,7 +49,7 @@
       "TP": 4,
       "FP": 81,
       "FN": 0,
-      "Inference Latency (ms)": 2.821
+      "Inference Latency (ms)": 2.661
     },
     {
       "Model": "Isolation_Forest",
@@ -61,7 +61,7 @@
       "TP": 4,
       "FP": 336,
       "FN": 0,
-      "Inference Latency (ms)": 4.726
+      "Inference Latency (ms)": 38.067
     },
     {
       "Model": "OneClass_SVM",
@@ -73,7 +73,7 @@
       "TP": 4,
       "FP": 536,
       "FN": 0,
-      "Inference Latency (ms)": 1.4
+      "Inference Latency (ms)": 1.415
     },
     {
       "Model": "Local_Outlier_Factor",
@@ -85,7 +85,7 @@
       "TP": 4,
       "FP": 1100,
       "FN": 0,
-      "Inference Latency (ms)": 21.807
+      "Inference Latency (ms)": 39.912
     }
   ]
 }

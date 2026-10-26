@@ -39,8 +39,14 @@ from scripts.generate_historical_plots import (
     plot_historical_pitstop_evolution,
     plot_current_vs_historical_changes
 )
+from scripts.generate_driver_timing_plots import (
+    plot_driver_lap_pace_comparison,
+    plot_driver_timing_anomalies_scatter,
+    plot_teammate_pace_deltas
+)
 from scripts.export_historical_json import export_historical_metrics
 from src.historical_engine import F1HistoricalEngine
+from src.driver_timing_engine import DriverTimingEngine
 
 
 def run_pipeline(
@@ -237,11 +243,19 @@ def run_pipeline(
     )
 
     # Step 7: Historical 1950-2026 Engine Integration
-    print("\n[STEP 7/7] Integrating 76 Seasons of F1 Historical Data (1950-2026)...")
+    print("\n[STEP 7/8] Integrating 76 Seasons of F1 Historical Data (1950-2026)...")
     export_historical_metrics(os.path.join(output_dir, "f1_historical_comparison.json"))
     plot_historical_reliability_evolution(os.path.join(plots_dir, "historical_reliability_evolution.png"))
     plot_historical_pitstop_evolution(os.path.join(plots_dir, "historical_pitstop_evolution.png"))
     plot_current_vs_historical_changes(os.path.join(plots_dir, "current_vs_historical_changes.png"))
+
+    # Step 8: Multi-Driver Live Race Timings & Anomaly Detection
+    print("\n[STEP 8/8] Analyzing Lap Timings & Anomalies for Every Driver in Current Running Race...")
+    driver_engine = DriverTimingEngine()
+    driver_engine.export_driver_timing_artifacts(output_dir=output_dir)
+    plot_driver_lap_pace_comparison(os.path.join(plots_dir, "driver_lap_pace_comparison.png"))
+    plot_driver_timing_anomalies_scatter(os.path.join(plots_dir, "driver_timing_anomalies_scatter.png"))
+    plot_teammate_pace_deltas(os.path.join(plots_dir, "teammate_pace_deltas.png"))
 
     print("\n🎯 All pipeline stages successfully executed!")
     return predictions_df, eval_df
