@@ -1,0 +1,42 @@
+{
+  "machine_temperature_system_failure.csv": {
+    "channel_name": "engine_temperature_sensor",
+    "description": "Internal Combustion Engine (ICE) cylinder head & coolant temperature sensor (\u00b0C)",
+    "unit": "\u00b0C",
+    "normal_range": [
+      70.0,
+      95.0
+    ],
+    "anomaly_description": "Catastrophic cooling radiator blockage and thermal runaway warning"
+  },
+  "ec2_cpu_utilization_5f5533.csv": {
+    "channel_name": "ers_mgu_k_load_pct",
+    "description": "Motor Generator Unit - Kinetic (MGU-K) electrical duty cycle (% capacity)",
+    "unit": "%",
+    "normal_range": [
+      20.0,
+      60.0
+    ],
+    "anomaly_description": "MGU-K harvesting inverter desynchronization and sudden energy cutoff"
+  },
+  "art_daily_flatmiddle.csv": {
+    "channel_name": "lap_time_stream_delta",
+    "description": "Sector 2 to Sector 3 relative lap pace delta vs baseline target pace (seconds)",
+    "unit": "s",
+    "normal_range": [
+      -0.5,
+      0.5
+    ],
+    "anomaly_description": "Safety car deployment / Virtual Safety Car delta time violation"
+  },
+  "ambient_temperature_system_failure.csv": {
+    "channel_name": "tyre_carcass_temp_fl",
+    "description": "Front-Left tyre carcass bulk core temperature under lateral load (\u00b0C)",
+    "unit": "\u00b0C",
+    "normal_range": [
+      85.0,
+      110.0
+    ],
+    "anomaly_description": "Severe blistering and sudden puncture delamination failure"
+  }
+}

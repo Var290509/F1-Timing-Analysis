@@ -1,0 +1,91 @@
+{
+  "channel_metadata": {
+    "dataset_file": "machine_temperature_system_failure.csv",
+    "nab_key": "realKnownCause/machine_temperature_system_failure.csv",
+    "telemetry_code": "TEL-ENG-01",
+    "channel_name": "ICE Cylinder Head & Coolant Temp",
+    "unit": "\u00b0C",
+    "description": "Monitors internal combustion engine thermal load. Rapid spikes indicate cooling radiator blockage or thermal runaway.",
+    "normal_operating_range": [
+      70.0,
+      95.0
+    ],
+    "sampling_rate": "5m"
+  },
+  "total_timestamps": 22695,
+  "ground_truth_windows_count": 4,
+  "models_performance": [
+    {
+      "Model": "ZScore_Detector",
+      "Event-F1": 0.2857,
+      "Precision": 0.2,
+      "Recall": 0.5,
+      "Detection Delay (pts)": 290.0,
+      "Detection Delay (min)": 1450.0,
+      "TP": 2,
+      "FP": 8,
+      "FN": 2,
+      "Inference Latency (ms)": 0.791
+    },
+    {
+      "Model": "Hybrid_Ensemble",
+      "Event-F1": 0.0899,
+      "Precision": 0.0471,
+      "Recall": 1.0,
+      "Detection Delay (pts)": 83.25,
+      "Detection Delay (min)": 416.25,
+      "TP": 4,
+      "FP": 81,
+      "FN": 0,
+      "Inference Latency (ms)": 0.0
+    },
+    {
+      "Model": "PyTorch_Autoencoder",
+      "Event-F1": 0.0899,
+      "Precision": 0.0471,
+      "Recall": 1.0,
+      "Detection Delay (pts)": 130.5,
+      "Detection Delay (min)": 652.5,
+      "TP": 4,
+      "FP": 81,
+      "FN": 0,
+      "Inference Latency (ms)": 2.763
+    },
+    {
+      "Model": "Isolation_Forest",
+      "Event-F1": 0.0233,
+      "Precision": 0.0118,
+      "Recall": 1.0,
+      "Detection Delay (pts)": 30.75,
+      "Detection Delay (min)": 153.75,
+      "TP": 4,
+      "FP": 336,
+      "FN": 0,
+      "Inference Latency (ms)": 40.001
+    },
+    {
+      "Model": "OneClass_SVM",
+      "Event-F1": 0.0147,
+      "Precision": 0.0074,
+      "Recall": 1.0,
+      "Detection Delay (pts)": 26.25,
+      "Detection Delay (min)": 131.25,
+      "TP": 4,
+      "FP": 536,
+      "FN": 0,
+      "Inference Latency (ms)": 1.415
+    },
+    {
+      "Model": "Local_Outlier_Factor",
+      "Event-F1": 0.0072,
+      "Precision": 0.0036,
+      "Recall": 1.0,
+      "Detection Delay (pts)": 46.0,
+      "Detection Delay (min)": 230.0,
+      "TP": 4,
+      "FP": 1100,
+      "FN": 0,
+      "Inference Latency (ms)": 43.48
+    }
+  ]
+}
