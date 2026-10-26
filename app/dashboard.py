@@ -1,7 +1,7 @@
 """
 🏎️ F1 SENTINEL — REAL-TIME TELEMETRY ANOMALY DETECTION & HISTORICAL ENGINE (1950–2026)
 Utkrishta 2026 AI/ML Hackathon | Challenge 2: Sentinel
-Pit Wall Real-Time Telemetry Monitoring & 76-Season Historical Evolution Console
+Pit Wall Command Center & Formula 1 Evolution Console
 """
 
 import os
@@ -32,131 +32,178 @@ from src.historical_engine import F1HistoricalEngine, F1_ERAS
 from src.driver_timing_engine import DriverTimingEngine
 
 
-# Page Configuration
+# -----------------------------------------------------------------------------
+# PAGE CONFIGURATION
+# -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="F1 Sentinel | Pit Wall & Era Evolution Console",
+    page_title="F1 Sentinel | Pit Wall Command & Anomaly Radar",
     page_icon="🏎️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Formula 1 Carbon Dark Theme CSS
+# -----------------------------------------------------------------------------
+# CUSTOM FORMULA 1 CARBON & NEON THEME STYLING
+# -----------------------------------------------------------------------------
 st.markdown("""
 <style>
+    /* Global App Container */
     .stApp {
-        background-color: #12121A;
-        color: #F3F3F3;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #0D0E15;
+        color: #F3F4F6;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     
-    .f1-header {
-        background: linear-gradient(90deg, #E10600 0%, #B00400 40%, #1E1E2D 100%);
-        padding: 18px 24px;
-        border-radius: 8px;
+    /* Top Banner Wrapper */
+    .hero-banner-container {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #2E2E42;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
         margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(225, 6, 0, 0.35);
     }
-    .f1-title {
-        font-size: 26px;
-        font-weight: 800;
-        color: #FFFFFF;
-        margin: 0;
-        letter-spacing: 1px;
-    }
-    .f1-subtitle {
-        font-size: 13px;
-        color: #E0E0E0;
-        margin: 4px 0 0 0;
-        font-weight: 500;
-    }
-    
+
+    /* Red Alert Card */
     .alert-box {
-        background-color: #2D0A0A;
+        background: linear-gradient(135deg, #2D0808 0%, #1A0505 100%);
         border-left: 6px solid #E10600;
-        border-radius: 6px;
-        padding: 14px 18px;
-        margin-bottom: 20px;
-        box-shadow: 0 0 20px rgba(225, 6, 0, 0.4);
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 22px;
+        box-shadow: 0 0 25px rgba(225, 6, 0, 0.35);
+        border-top: 1px solid #4A1010;
+        border-right: 1px solid #4A1010;
+        border-bottom: 1px solid #4A1010;
     }
-    .alert-title {
-        color: #FF3333;
-        font-size: 16px;
-        font-weight: 700;
-        margin-bottom: 4px;
+    .alert-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #FF3B30;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
     }
     .alert-evidence {
         color: #FFD4D4;
-        font-size: 13px;
-        font-family: monospace;
-        line-height: 1.4;
+        font-size: 13.5px;
+        font-family: "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        line-height: 1.5;
+        background-color: rgba(0, 0, 0, 0.35);
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(225, 6, 0, 0.25);
     }
     
+    /* Nominal Telemetry Card */
     .nominal-box {
-        background-color: #0A201A;
+        background: linear-gradient(135deg, #06211A 0%, #041410 100%);
         border-left: 6px solid #00D2BE;
-        border-radius: 6px;
-        padding: 12px 18px;
-        margin-bottom: 20px;
+        border-radius: 8px;
+        padding: 14px 20px;
+        margin-bottom: 22px;
+        border-top: 1px solid #0E3D32;
+        border-right: 1px solid #0E3D32;
+        border-bottom: 1px solid #0E3D32;
+        box-shadow: 0 4px 15px rgba(0, 210, 190, 0.15);
     }
-    .nominal-title {
+    .nominal-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         color: #00D2BE;
-        font-size: 15px;
+        font-size: 15.5px;
         font-weight: 700;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
     }
     .nominal-text {
-        color: #B0EADF;
-        font-size: 12px;
-        font-family: monospace;
+        color: #A7F3D0;
+        font-size: 12.5px;
+        font-family: "SF Mono", Monaco, Consolas, monospace;
     }
 
+    /* Metric HUD Card */
     .metric-card {
-        background-color: #1A1A26;
-        border: 1px solid #2E2E42;
-        border-radius: 8px;
-        padding: 12px 16px;
+        background: linear-gradient(180deg, #181926 0%, #12131D 100%);
+        border: 1px solid #28293D;
+        border-radius: 10px;
+        padding: 14px 16px;
         text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+    .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+        border-color: #3E4060;
     }
     .metric-val {
-        font-size: 22px;
+        font-size: 23px;
         font-weight: 800;
         color: #FFFFFF;
+        letter-spacing: -0.5px;
+        margin-bottom: 2px;
     }
     .metric-lbl {
         font-size: 11px;
-        color: #8E8EA8;
+        color: #9CA3AF;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
     }
-    
-    .pillar-card {
-        background-color: #1A1A26;
-        border-left: 4px solid #3B82F6;
-        border-radius: 6px;
+
+    /* Quick Guide Box */
+    .guide-box {
+        background-color: #151622;
+        border: 1px solid #2B2C40;
+        border-radius: 8px;
         padding: 14px 18px;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #D1D5DB;
+        line-height: 1.5;
+    }
+
+    /* Pillar Cards */
+    .pillar-card {
+        background: linear-gradient(135deg, #171826 0%, #11121C 100%);
+        border-left: 4px solid #3B82F6;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        border-top: 1px solid #232538;
+        border-right: 1px solid #232538;
+        border-bottom: 1px solid #232538;
     }
     .pillar-title {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 700;
         color: #60A5FA;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
     .pillar-body {
-        font-size: 12.5px;
+        font-size: 13px;
         color: #D1D5DB;
         line-height: 1.5;
     }
     .pillar-tag {
-        font-size: 11.5px;
+        font-size: 12px;
         color: #34D399;
         font-weight: 600;
-        margin-top: 6px;
+        margin-top: 8px;
+        background-color: rgba(52, 211, 153, 0.1);
+        padding: 4px 10px;
+        border-radius: 4px;
+        display: inline-block;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
+# -----------------------------------------------------------------------------
+# CACHED DATA PIPELINE & MODEL BUNDLES
+# -----------------------------------------------------------------------------
 @st.cache_resource
 def load_and_prepare_channel(channel_key: str):
     """
@@ -230,34 +277,45 @@ def get_driver_engine():
     return DriverTimingEngine()
 
 
+# -----------------------------------------------------------------------------
+# MAIN APPLICATION
+# -----------------------------------------------------------------------------
 def main():
     channels = get_available_channels()
     hist_engine = get_historical_engine()
 
-    # --- SIDEBAR CONTROLS ---
+    # --- TOP HERO BANNER IMAGE ---
+    banner_path = "app/assets/f1_hero_banner.png"
+    if os.path.exists(banner_path):
+        st.image(banner_path, use_container_width=True)
+
+    # --- SIDEBAR NAVIGATION & CONTROLS ---
     with st.sidebar:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg", width=120)
-        st.markdown("### 🎛️ Navigation & Control")
+        st.markdown("## 🏎️ Pit Wall Console")
+        st.markdown("Select your operational dashboard mode below:")
+        
         app_mode = st.radio(
-            "Dashboard View:",
+            "Console View:",
             options=[
                 "🏎️ Real-Time Telemetry Monitor",
                 "⏱️ Multi-Driver Live Timing & Anomaly Matrix",
-                "🏛️ 1950–2026 Historical Evolution & Current Game"
-            ]
+                "🏛️ 1950–2026 Historical Evolution",
+                "📊 Competition Artifacts & Plot Gallery"
+            ],
+            index=0
         )
 
         st.markdown("---")
-        st.markdown("### 🛠️ Telemetry Channel")
+        st.markdown("### 📡 Telemetry Channels")
         channel_names = {k: f"{v['telemetry_code']} - {v['channel_name']}" for k, v in channels.items()}
         selected_key = st.selectbox(
-            "Live Telemetry Stream:",
+            "Sensor Data Stream:",
             options=list(channels.keys()),
             format_func=lambda k: channel_names[k]
         )
 
         st.markdown("---")
-        st.markdown("### ⏱️ Live Simulation Controls")
+        st.markdown("### ⏯️ Live Simulation Playback")
 
         if "stream_idx" not in st.session_state:
             st.session_state.stream_idx = 100
@@ -279,7 +337,7 @@ def main():
                 st.session_state.stream_idx = 100
                 st.session_state.is_playing = False
 
-        playback_speed = st.slider("Streaming Pace (steps/frame):", min_value=1, max_value=20, value=3)
+        playback_speed = st.slider("Streaming Speed (pts/tick):", min_value=1, max_value=25, value=4)
 
         st.markdown("---")
         st.markdown("### 🎯 Jump to Racing Incident")
@@ -288,23 +346,22 @@ def main():
         df = data_bundle["df"]
 
         if gt_windows:
-            jump_options = [f"Incident {i+1}: {w[0].strftime('%b %d %H:%M')}" for i, w in enumerate(gt_windows)]
-            selected_incident = st.selectbox("Select Anomaly Window:", options=list(range(len(jump_options))), format_func=lambda i: jump_options[i])
+            jump_options = [f"Incident #{i+1}: {w[0].strftime('%b %d %H:%M')}" for i, w in enumerate(gt_windows)]
+            selected_incident = st.selectbox("Select Anomaly Event:", options=list(range(len(jump_options))), format_func=lambda i: jump_options[i])
             if st.button("🚀 Jump to Incident", use_container_width=True):
                 target_time = gt_windows[selected_incident][0]
                 matching_indices = df[df["timestamp"] >= target_time].index
                 if len(matching_indices) > 0:
-                    st.session_state.stream_idx = max(50, matching_indices[0] - 30)
+                    st.session_state.stream_idx = max(50, matching_indices[0] - 25)
+                    st.session_state.is_playing = False
                     st.rerun()
 
         st.markdown("---")
-        st.markdown(
-            "**Utkrishta 2026 AI/ML Hackathon**  \n"
-            "*Challenge 2: Sentinel (Adaptive Time-Series)*  \n"
-            "Domain: Formula 1 Racing (1950–2026 Archive)"
-        )
+        st.caption("🏆 **Utkrishta 2026 AI/ML Hackathon**")
+        st.caption("Challenge 2: Sentinel (Adaptive Time-Series Anomaly Detection)")
+        st.caption("Repository: `Var290509/F1-Timing-Analysis`")
 
-    # Load current channel data
+    # Load active telemetry stream
     data_bundle = load_and_prepare_channel(selected_key)
     df = data_bundle["df"]
     meta = data_bundle["meta"]
@@ -326,30 +383,38 @@ def main():
     curr_pred = preds[curr_idx]
     curr_evidence = evidences[curr_idx]
 
-    # --- VIEW 1: LIVE REAL-TIME TELEMETRY MONITOR ---
+    # =========================================================================
+    # VIEW 1: REAL-TIME TELEMETRY MONITOR
+    # =========================================================================
     if app_mode == "🏎️ Real-Time Telemetry Monitor":
-        st.markdown(f"""
-        <div class="f1-header">
-            <h1 class="f1-title">🏎️ F1 SENTINEL — REAL-TIME TELEMETRY ANOMALY DETECTION</h1>
-            <p class="f1-subtitle">PIT WALL MONITORING & TACTICAL ANOMALY DIAGNOSTIC CONSOLE | CHANNEL: {meta['telemetry_code']} - {meta['channel_name']}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        # Quick User Guide Expander
+        with st.expander("ℹ️ How to Use This Pit Wall Monitor (Click to Expand)", expanded=False):
+            st.markdown("""
+            **Welcome to F1 Sentinel Live Telemetry Radar!**
+            - **Live Sensor Value**: Real-time reading from car #16 (Charles Leclerc).
+            - **Ensemble Score**: Continuous float [0, 1] combining 5 detectors (Z-Score, IsoForest, LOF, OCSVM, Autoencoder).
+            - **Adaptive Dynamic Threshold**: Automatically recalculates trailing baseline distributions and shifts during tactical condition changes.
+            - **Red Alert Banner**: Activates when `Ensemble Score >= Threshold`, providing plain-English diagnostic telemetry evidence.
+            - **Controls**: Use the **Play / Pause** buttons or **Jump to Racing Incident** in the sidebar to simulate live streaming.
+            """)
 
+        # Alert or Nominal Status Card
         if curr_pred:
             st.markdown(f"""
             <div class="alert-box">
-                <div class="alert-title">🚨 RED ALERT: TELEMETRY ANOMALY DETECTED ON CAR #16</div>
+                <div class="alert-header">🚨 RED ALERT: TELEMETRY ANOMALY CONFIRMED (CAR #16)</div>
                 <div class="alert-evidence">{curr_evidence}</div>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class="nominal-box">
-                <div class="nominal-title">🟢 NOMINAL RACE TELEMETRY — ALL SYSTEMS HEALTHY</div>
+                <div class="nominal-header">🟢 NOMINAL RACE TELEMETRY — ALL SYSTEMS WITHIN OPERATING WINDOW</div>
                 <div class="nominal-text">{curr_evidence}</div>
             </div>
             """, unsafe_allow_html=True)
 
+        # 5 Metric HUD Cards
         c1, c2, c3, c4, c5 = st.columns(5)
         with c1:
             st.markdown(f"""
@@ -370,11 +435,11 @@ def main():
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-val" style="color: #FFB800;">{curr_thresh:.3f}</div>
-                <div class="metric-lbl">Adaptive Dynamic Threshold</div>
+                <div class="metric-lbl">Dynamic Threshold</div>
             </div>
             """, unsafe_allow_html=True)
         with c4:
-            status_text = "ANOMALOUS" if curr_pred else "NOMINAL"
+            status_text = "ANOMALY FLAG" if curr_pred else "NOMINAL"
             status_color = "#E10600" if curr_pred else "#10B981"
             st.markdown(f"""
             <div class="metric-card">
@@ -387,12 +452,13 @@ def main():
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-val" style="color: #FFFFFF;">{progress_pct:.1f}%</div>
-                <div class="metric-lbl">Session Ingested</div>
+                <div class="metric-lbl">Stream Ingested</div>
             </div>
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
+        # Charts Section
         col_chart1, col_chart2 = st.columns([2, 1])
         window_pts = 180
         start_history = max(0, curr_idx - window_pts)
@@ -402,7 +468,7 @@ def main():
         slice_df["flag"] = preds[start_history: curr_idx + 1]
 
         with col_chart1:
-            st.markdown("#### 📈 Real-Time Telemetry Stream & Detection Flags")
+            st.markdown("#### 📈 Real-Time Telemetry Stream & Anomaly Flags")
             base = alt.Chart(slice_df).encode(x=alt.X("timestamp:T", title="Session Time"))
             line_sensor = base.mark_line(color="#00D2BE", strokeWidth=2.2).encode(
                 y=alt.Y("value:Q", title=f"Sensor Value ({meta['unit']})", scale=alt.Scale(zero=False))
@@ -416,15 +482,15 @@ def main():
             chart1 = (line_sensor + anom_points).properties(height=260).configure_view(
                 strokeWidth=0
             ).configure_axis(
-                gridColor="#2D2D3F",
+                gridColor="#242536",
                 labelColor="#A0A0B0",
                 titleColor="#FFFFFF"
             )
             st.altair_chart(chart1, use_container_width=True)
 
-            st.markdown("#### ⚡ Anomaly Score vs. Dynamic Adaptive Threshold")
+            st.markdown("#### ⚡ Continuous Anomaly Score vs. Adaptive Dynamic Threshold")
             line_score = base.mark_line(color="#3B82F6", strokeWidth=2.0).encode(
-                y=alt.Y("score:Q", title="Anomaly Score / Threshold", scale=alt.Scale(domain=[0, 1]))
+                y=alt.Y("score:Q", title="Score / Threshold", scale=alt.Scale(domain=[0, 1]))
             )
             line_thresh = base.mark_line(color="#EF4444", strokeDash=[4, 4], strokeWidth=2.0).encode(
                 y="threshold:Q"
@@ -432,7 +498,7 @@ def main():
             chart2 = (line_score + line_thresh).properties(height=220).configure_view(
                 strokeWidth=0
             ).configure_axis(
-                gridColor="#2D2D3F",
+                gridColor="#242536",
                 labelColor="#A0A0B0",
                 titleColor="#FFFFFF"
             )
@@ -441,7 +507,7 @@ def main():
         with col_chart2:
             st.markdown("#### 🤖 Model Consensus Breakdown")
             models_display = {
-                "Z-Score Statistical": float(model_scores["ZScore_Detector"][curr_idx]),
+                "Z-Score Baseline": float(model_scores["ZScore_Detector"][curr_idx]),
                 "Isolation Forest": float(model_scores["Isolation_Forest"][curr_idx]),
                 "Local Outlier Factor": float(model_scores["Local_Outlier_Factor"][curr_idx]),
                 "One-Class SVM": float(model_scores["OneClass_SVM"][curr_idx]),
@@ -462,24 +528,37 @@ def main():
                     alt.value("#E10600"),
                     alt.value("#3B82F6")
                 )
-            ).properties(height=260).configure_view(strokeWidth=0).configure_axis(
-                gridColor="#2D2D3F",
+            ).properties(height=240).configure_view(strokeWidth=0).configure_axis(
+                gridColor="#242536",
                 labelColor="#FFFFFF",
                 titleColor="#FFFFFF"
             )
             st.altair_chart(bar_chart, use_container_width=True)
 
-            st.markdown("#### 🏛️ Live vs. Historical Era Benchmark")
+            # Historical Era Comparison Snippet
             hist_bench = hist_engine.benchmark_current_telemetry(meta["channel_name"], curr_val, curr_score)
             st.info(
-                f"**Current Game Baseline**: `{hist_bench['current_game_attrition_baseline']}`  \n"
-                f"**1980s Turbo Baseline**: `{hist_bench['historical_turbo_attrition_baseline']}`  \n"
+                f"**Current Game Attrition Baseline**: `{hist_bench['current_game_attrition_baseline']}`  \n"
+                f"**1980s Turbo Era Baseline**: `{hist_bench['historical_turbo_attrition_baseline']}`  \n"
                 f"**Tactical Verdict**: {hist_bench['tactical_verdict']}"
             )
 
+        # Technical Sensor & Model Architecture Visual Explanations
+        st.markdown("---")
+        st.markdown("### 🏎️ Telemetry Sensor Mapping & Multi-Model Architecture")
+        col_img1, col_img2 = st.columns(2)
+        with col_img1:
+            sensor_img = "app/assets/f1_sensor_architecture.png"
+            if os.path.exists(sensor_img):
+                st.image(sensor_img, caption="F1 Onboard Telemetry Architecture & Sensor Placement", use_container_width=True)
+        with col_img2:
+            arch_img = "app/assets/model_architecture_pipeline.png"
+            if os.path.exists(arch_img):
+                st.image(arch_img, caption="5-Model Hybrid Ensemble & Adaptive Dynamic Thresholding Pipeline", use_container_width=True)
+
         # Recent Incident Log
         st.markdown("---")
-        st.markdown("### 📜 Past Detected Telemetry Incidents (Event Log)")
+        st.markdown("### 📜 Session Incident Log (Past Flagged Events)")
         past_preds = preds[:curr_idx + 1]
         if np.any(past_preds):
             incident_indices = np.where(past_preds)[0]
@@ -493,20 +572,22 @@ def main():
             for ev_idx in reversed(recent_events):
                 event_rows.append({
                     "Timestamp": str(df["timestamp"].iloc[ev_idx]),
-                    "Value": f"{df['value'].iloc[ev_idx]:.2f} {meta['unit']}",
+                    "Sensor Value": f"{df['value'].iloc[ev_idx]:.2f} {meta['unit']}",
                     "Anomaly Score": f"{scores[ev_idx]:.3f}",
                     "Threshold": f"{thresholds[ev_idx]:.3f}",
-                    "Diagnostic Evidence": evidences[ev_idx]
+                    "Telemetry Diagnostic Evidence": evidences[ev_idx]
                 })
             st.dataframe(pd.DataFrame(event_rows), use_container_width=True)
         else:
-            st.markdown("*No telemetry anomalies flagged yet in current session playback.*")
+            st.markdown("*No telemetry anomalies flagged yet in current playback segment.*")
 
         if st.session_state.is_playing and curr_idx < len(df) - 1:
             time.sleep(0.08)
             st.rerun()
 
-    # --- VIEW 2: MULTI-DRIVER LIVE TIMING & ANOMALY MATRIX ---
+    # =========================================================================
+    # VIEW 2: MULTI-DRIVER LIVE TIMING & ANOMALY MATRIX
+    # =========================================================================
     elif app_mode == "⏱️ Multi-Driver Live Timing & Anomaly Matrix":
         driver_engine = get_driver_engine()
         latest_id = driver_engine.get_latest_race_id()
@@ -516,11 +597,16 @@ def main():
         driver_anoms = driver_engine.detect_driver_timing_anomalies(latest_id)
 
         st.markdown(f"""
-        <div class="f1-header">
-            <h1 class="f1-title">⏱️ MULTI-DRIVER LIVE TIMING & RACE ANOMALY MATRIX</h1>
-            <p class="f1-subtitle">SESSION: {race_info['year']} {race_info['name'].upper()} | ROUND {race_info['round']} | {len(driver_summary)} DRIVERS ANALYZED</p>
+        <div style="background: linear-gradient(90deg, #E10600 0%, #1E1E2D 100%); padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #FFFFFF; font-size: 22px;">⏱️ FORMULA 1 GRID LIVE TIMING & ANOMALY RADAR</h2>
+            <p style="margin: 4px 0 0 0; color: #E0E0E0; font-size: 13px;">SESSION: {race_info['year']} {race_info['name'].upper()} | ROUND {race_info['round']} | {len(driver_summary)} DRIVERS ANALYZED</p>
         </div>
         """, unsafe_allow_html=True)
+
+        # Team Grid Identity Graphic
+        team_grid_img = "app/assets/f1_team_grid.png"
+        if os.path.exists(team_grid_img):
+            st.image(team_grid_img, use_container_width=True)
 
         # KPI Row
         d1, d2, d3, d4, d5 = st.columns(5)
@@ -529,7 +615,7 @@ def main():
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-val" style="color: #FFB800;">{winner}</div>
-                <div class="metric-lbl">Race Winner (P1)</div>
+                <div class="metric-lbl">Grand Prix Winner</div>
             </div>
             """, unsafe_allow_html=True)
         with d2:
@@ -554,7 +640,7 @@ def main():
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-val" style="color: #E10600;">{total_anom}</div>
-                <div class="metric-lbl">Grid Timing Anomalies Flagged</div>
+                <div class="metric-lbl">Grid Anomalies Flagged</div>
             </div>
             """, unsafe_allow_html=True)
         with d5:
@@ -562,27 +648,28 @@ def main():
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-val" style="color: #FFFFFF;">{max_laps} Laps</div>
-                <div class="metric-lbl">Total Race Distance</div>
+                <div class="metric-lbl">Race Distance</div>
             </div>
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Tabs for Timing Analysis
-        tab_board, tab_pace, tab_anom, tab_team = st.tabs([
-            "🏆 Official F1 Timing Leaderboard",
-            "📈 Multi-Driver Lap Pace Comparison",
-            "🚨 Grid Timing Anomalies Incident Log",
-            "⚔️ Intra-Team Head-to-Head Battle"
+        # Tabs for Driver Timing Analysis
+        tab_board, tab_pace, tab_anom, tab_team, tab_track = st.tabs([
+            "🏆 Official Timing Tower",
+            "📈 Multi-Driver Lap Pace",
+            "🚨 Grid Anomaly Log (91 Events)",
+            "⚔️ Teammate Head-to-Head",
+            "🗺️ Circuit Map & Pirelli Tyres"
         ])
 
         with tab_board:
             st.markdown("### 🏆 Race Classification & Driver Timing Summary")
-            st.markdown("Pace metrics, fastest laps, median race pace, and pit stop counts for every driver:")
+            st.markdown("Detailed breakdown of start/finish positions, fastest laps, median race pace, and pit counts:")
             st.dataframe(driver_summary, use_container_width=True)
 
         with tab_pace:
-            st.markdown("### 📈 Driver Lap-by-Lap Pace & Stint Degradation")
+            st.markdown("### 📈 Driver Lap Pace & Degradation Trajectories")
             driver_options = sorted(grid_df["code"].unique())
             default_selection = [c for c in ["ANT", "LEC", "VER", "HAM", "NOR", "PIA"] if c in driver_options]
             selected_drivers = st.multiselect(
@@ -596,9 +683,9 @@ def main():
                 chart_pace = alt.Chart(sub_compare).mark_line(strokeWidth=2.2).encode(
                     x=alt.X("lap:Q", title="Lap Number"),
                     y=alt.Y("lap_sec:Q", title="Lap Time (seconds)", scale=alt.Scale(domain=[95, 125])),
-                    color=alt.Color("code:N", title="Driver Code")
+                    color=alt.Color("code:N", title="Driver")
                 ).properties(height=380).configure_view(strokeWidth=0).configure_axis(
-                    gridColor="#2D2D3F",
+                    gridColor="#242536",
                     labelColor="#FFFFFF",
                     titleColor="#FFFFFF"
                 )
@@ -606,19 +693,28 @@ def main():
 
             plot_pace_path = "outputs/plots/driver_lap_pace_comparison.png"
             if os.path.exists(plot_pace_path):
-                st.image(plot_pace_path, use_container_width=True)
+                st.image(plot_pace_path, caption="Comprehensive Lap Pace & Stint Progression Across All Drivers", use_container_width=True)
 
         with tab_anom:
             st.markdown(f"### 🚨 Grid Timing Anomalies ({len(driver_anoms)} Incidents Detected)")
             st.markdown(
-                "Real-time timing anomalies across all drivers: sudden pace spikes, tyre degradation cliffs, "
-                "and pit lane transit delays with explainable diagnostic evidence."
+                "Filter and inspect real-time timing anomalies across all 22 drivers: "
+                "sudden pace drops, tyre degradation cliffs, and pit delays."
             )
-            st.dataframe(driver_anoms, use_container_width=True)
+            
+            # Anomaly filter
+            anom_types = ["ALL"] + sorted(driver_anoms["anomaly_type"].unique().tolist())
+            selected_type = st.selectbox("Filter Anomaly Class:", options=anom_types)
+            if selected_type != "ALL":
+                filtered_anoms = driver_anoms[driver_anoms["anomaly_type"] == selected_type]
+            else:
+                filtered_anoms = driver_anoms
+
+            st.dataframe(filtered_anoms, use_container_width=True)
 
             plot_scatter_path = "outputs/plots/driver_timing_anomalies_scatter.png"
             if os.path.exists(plot_scatter_path):
-                st.image(plot_scatter_path, use_container_width=True)
+                st.image(plot_scatter_path, caption="Grid Timing Anomaly Distribution (Lap vs Pace Spike)", use_container_width=True)
 
         with tab_team:
             st.markdown("### ⚔️ Intra-Team Head-to-Head Performance Deltas")
@@ -629,11 +725,11 @@ def main():
                 selected_team = st.selectbox("Select Constructor Pairing:", options=teams_list)
                 team_sub = teammates_df[teammates_df["team"] == selected_team].sort_values("lap")
                 
-                chart_team = alt.Chart(team_sub).mark_line(color="#E10600", strokeWidth=2.0).encode(
+                chart_team = alt.Chart(team_sub).mark_line(color="#E10600", strokeWidth=2.2).encode(
                     x=alt.X("lap:Q", title="Lap Number"),
                     y=alt.Y("delta_d1_minus_d2:Q", title=f"Lap Delta: {team_sub['driver_1'].iloc[0]} vs {team_sub['driver_2'].iloc[0]} (s)", scale=alt.Scale(domain=[-5, 5]))
                 ).properties(height=320).configure_view(strokeWidth=0).configure_axis(
-                    gridColor="#2D2D3F",
+                    gridColor="#242536",
                     labelColor="#FFFFFF",
                     titleColor="#FFFFFF"
                 )
@@ -641,23 +737,38 @@ def main():
 
             plot_team_path = "outputs/plots/teammate_pace_deltas.png"
             if os.path.exists(plot_team_path):
-                st.image(plot_team_path, use_container_width=True)
+                st.image(plot_team_path, caption="Intra-Team Pace Delta Distribution & Divergence", use_container_width=True)
 
-    # --- VIEW 3: 1950–2026 HISTORICAL EVOLUTION & CURRENT GAME TRANSFORMATION ---
-    else:
+        with tab_track:
+            st.markdown("### 🗺️ Circuit Layout & Pirelli Tyre Compound Specs")
+            c_track, c_tyre = st.columns([1, 1])
+            with c_track:
+                cota_map = "app/assets/cota_circuit_map.png"
+                if os.path.exists(cota_map):
+                    st.image(cota_map, caption="Circuit of the Americas (COTA) 20-Turn Sector Layout", use_container_width=True)
+            with c_tyre:
+                tyre_spec = "app/assets/pirelli_tyre_compounds.png"
+                if os.path.exists(tyre_spec):
+                    st.image(tyre_spec, caption="Pirelli F1 Tyre Compounds & Degradation Cliff Criteria", use_container_width=True)
+
+    # =========================================================================
+    # VIEW 3: 1950–2026 HISTORICAL EVOLUTION
+    # =========================================================================
+    elif app_mode == "🏛️ 1950–2026 Historical Evolution":
         st.markdown("""
-        <div class="f1-header">
-            <h1 class="f1-title">🏛️ FORMULA 1 HISTORICAL EVOLUTION (1950–2026)</h1>
-            <p class="f1-subtitle">INTEGRATING 76 SEASONS, 1,172 GRANDS PRIX, AND 27,600+ RACES TO BENCHMARK THE CURRENT RUNNING GAME</p>
+        <div style="background: linear-gradient(90deg, #3B82F6 0%, #1E1E2D 100%); padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #FFFFFF; font-size: 22px;">🏛️ FORMULA 1 HISTORICAL EVOLUTION (1950–2026)</h2>
+            <p style="margin: 4px 0 0 0; color: #E0E0E0; font-size: 13px;">76 SEASONS, 1,172 GRANDS PRIX, AND 27,600+ RACES BENCHMARKING THE MODERN RUNNING GAME</p>
         </div>
         """, unsafe_allow_html=True)
 
+        # 5 Historical Metric HUD Cards
         k1, k2, k3, k4, k5 = st.columns(5)
         with k1:
             st.markdown("""
             <div class="metric-card">
                 <div class="metric-val" style="color: #FFFFFF;">1,172</div>
-                <div class="metric-lbl">Grands Prix (1950–2026)</div>
+                <div class="metric-lbl">Total Grands Prix</div>
             </div>
             """, unsafe_allow_html=True)
         with k2:
@@ -685,13 +796,13 @@ def main():
             st.markdown("""
             <div class="metric-card">
                 <div class="metric-val" style="color: #E10600;">798 kg</div>
-                <div class="metric-lbl">Current Minimum Car Mass</div>
+                <div class="metric-lbl">Minimum Vehicle Mass</div>
             </div>
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Tabbed analysis
+        # Tabbed Analysis
         tab_rel, tab_pit, tab_pillars, tab_eras = st.tabs([
             "📉 Reliability & DNF Evolution",
             "⏱️ Pit Stop Precision Evolution",
@@ -703,7 +814,7 @@ def main():
             st.markdown("### 📉 The Mechanical Reliability Revolution")
             st.markdown(
                 "How Formula 1 transitioned from a sport where **half the cars broke down** every Sunday "
-                "to an aerospace-grade competition where an engine failure is a catastrophic rarity."
+                "to an aerospace-grade competition where an engine failure is an acute anomaly."
             )
             rel_df = hist_engine.compute_reliability_evolution()
             if not rel_df.empty:
@@ -711,7 +822,7 @@ def main():
 
             plot_path = "outputs/plots/historical_reliability_evolution.png"
             if os.path.exists(plot_path):
-                st.image(plot_path, use_container_width=True)
+                st.image(plot_path, caption="Mechanical DNF Rate by Decade across 76 Seasons", use_container_width=True)
 
         with tab_pit:
             st.markdown("### ⏱️ Pit Stop Precision & Time Compression")
@@ -720,14 +831,11 @@ def main():
                 "to modern sub-2-second synchronous tyre choreography."
             )
             pit_path = "outputs/plots/historical_pitstop_evolution.png"
-            if os.path.exists(plot_path):
-                st.image(pit_path, use_container_width=True)
+            if os.path.exists(pit_path):
+                st.image(pit_path, caption="Pit Stop Duration Compression (1950 vs Current Era)", use_container_width=True)
 
         with tab_pillars:
             st.markdown("### 🚀 The 6 Transformative Pillars of the Current Running Game (2022–2026)")
-            st.markdown(
-                "What makes modern Formula 1 fundamentally distinct from any prior era in racing history?"
-            )
             pillars = hist_engine.get_current_game_transformation_pillars()
             for p in pillars:
                 st.markdown(f"""
@@ -741,8 +849,7 @@ def main():
 
             trans_plot = "outputs/plots/current_vs_historical_changes.png"
             if os.path.exists(trans_plot):
-                st.markdown("#### 📊 Quantitative Pillar Comparison")
-                st.image(trans_plot, use_container_width=True)
+                st.image(trans_plot, caption="Pillar-by-Pillar Quantitative Shift: Historical vs Current F1", use_container_width=True)
 
         with tab_eras:
             st.markdown("### 📚 The 7 Distinct Eras of Formula 1 World Championship Racing")
@@ -756,6 +863,42 @@ def main():
                     with c_b:
                         st.write(f"**Aerodynamic Design:** {era_meta['aero_type']}")
                         st.write(f"**Key Era Dynamics:** {era_meta['key_characteristics']}")
+
+    # =========================================================================
+    # VIEW 4: COMPETITION ARTIFACTS & PLOT GALLERY
+    # =========================================================================
+    else:
+        st.markdown("""
+        <div style="background: linear-gradient(90deg, #10B981 0%, #1E1E2D 100%); padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #FFFFFF; font-size: 22px;">📊 COMPETITION ARTIFACTS & VISUAL PLOT GALLERY</h2>
+            <p style="margin: 4px 0 0 0; color: #E0E0E0; font-size: 13px;">ALL 11 HIGH-RESOLUTION VISUALIZATION ARTIFACTS GENERATED FOR CHALLENGE 2: SENTINEL</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(
+            "Every artifact below was autonomously generated by the F1 Sentinel pipeline using official "
+            "Numenta Anomaly Benchmark (NAB) and Formula 1 Grand Prix telemetry data."
+        )
+
+        plots_info = [
+            {"path": "outputs/plots/time_series_anomalies.png", "title": "1. Telemetry Stream with Ground Truth Windows & Detected Flags", "desc": "Continuous sensor readings with shaded NAB ground-truth failure windows and red anomaly markers."},
+            {"path": "outputs/plots/anomaly_score_and_threshold.png", "title": "2. Anomaly Score Trajectory vs. Dynamic Adaptive Threshold", "desc": "Trailing mean + k*std threshold adjusting to data distribution without lookahead leakage."},
+            {"path": "outputs/plots/model_comparison_metrics.png", "title": "3. Multi-Model Benchmark Comparison (F1, Precision, Recall, Delay)", "desc": "Comparing all 5 detectors + Hybrid Ensemble under official NAB event-based metrics."},
+            {"path": "outputs/plots/confusion_breakdown.png", "title": "4. Confusion-Style Event Breakdown (TP, FP, FN Counts)", "desc": "Event-level true positives, false positives, and false negatives for each detector."},
+            {"path": "outputs/plots/zoom_in_cases.png", "title": "5. Zoom-In Case Studies with Diagnostic Evidence Debriefs", "desc": "Detailed inspection of one True Positive, one False Positive, and one Missed Window with natural language debriefs."},
+            {"path": "outputs/plots/driver_lap_pace_comparison.png", "title": "6. Driver Lap-by-Lap Pace Trajectories (2026 US GP)", "desc": "Stint degradation and pace comparison across top contenders."},
+            {"path": "outputs/plots/driver_timing_anomalies_scatter.png", "title": "7. Grid-Wide Timing Anomaly Scatter Matrix", "desc": "Scatter plot of 91 detected anomalies categorized by lockup, tyre cliff, pit delay, and off-track damage."},
+            {"path": "outputs/plots/teammate_pace_deltas.png", "title": "8. Intra-Team Teammate Pace Delta Distributions", "desc": "Divergence between teammates in identical machinery across laps."},
+            {"path": "outputs/plots/historical_reliability_evolution.png", "title": "9. 76-Season Mechanical Reliability Evolution", "desc": "Decade-by-decade collapse of mechanical attrition from 47.5% down to 8.9%."},
+            {"path": "outputs/plots/historical_pitstop_evolution.png", "title": "10. Pit Stop Compression Across Eras", "desc": "Historical shift from 60s copper-mallet wheel changes to 1.80s robotic tyre changes."},
+            {"path": "outputs/plots/current_vs_historical_changes.png", "title": "11. The 6 Transformation Pillars of Modern Formula 1", "desc": "Quantitative radar and bar chart comparing historical F1 to the current running game."}
+        ]
+
+        for p in plots_info:
+            if os.path.exists(p["path"]):
+                with st.expander(f"🖼️ {p['title']}", expanded=True):
+                    st.write(p["desc"])
+                    st.image(p["path"], use_container_width=True)
 
 
 if __name__ == "__main__":
