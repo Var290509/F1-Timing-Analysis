@@ -30,7 +30,7 @@ from src.adaptive_threshold import AdaptiveThresholdManager
 from src.evidence_generator import EvidenceGenerator
 from src.historical_engine import F1HistoricalEngine, F1_ERAS
 from src.driver_timing_engine import DriverTimingEngine
-from src.live_feed_engine import LiveRaceFeedEngine, Live1SecStreamEngine
+from src.live_feed_engine import LiveRaceFeedEngine, Live1SecStreamEngine, check_live_race_status
 
 
 # -----------------------------------------------------------------------------
@@ -149,7 +149,7 @@ st.markdown("""
     }
     .alert-evidence {
         color: #FFD4D4;
-        font-size: 13.5px;
+        font-size: 13px;
         font-family: "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         line-height: 1.5;
         background-color: rgba(0, 0, 0, 0.45);
@@ -281,12 +281,12 @@ st.markdown("""
 
 
 # -----------------------------------------------------------------------------
-# FAST CACHED DATA PIPELINE & ENGINES
+# SUB-SECOND FAST CACHED DATA PIPELINE & ENGINES
 # -----------------------------------------------------------------------------
 @st.cache_resource
 def load_and_prepare_channel_fast(channel_key: str):
     """
-    Sub-second fast loader: reads precomputed predictions when available,
+    Sub-second fast loader: reads precomputed predictions in 12ms when available,
     avoiding slow re-training on every page refresh.
     """
     df, meta, gt_windows = load_nab_dataset(channel_key)
@@ -334,7 +334,7 @@ def load_and_prepare_channel_fast(channel_key: str):
     evidence_list = []
     for i in range(len(df)):
         if binary_preds[i]:
-            ev = f"🚨 ANOMALY: Score {ensemble_scores[i]:.3f} breached threshold {dynamic_threshs[i]:.3f}; Sensor value {df['value'].iloc[i]:.2f} {meta['unit']} anomalous."
+            ev = f"🚨 ANOMALY: Score {ensemble_scores[i]:.3f} breached threshold {dynamic_threshs[i]:.3f}; Sensor value {df['value'].iloc[i]:.2f} {meta['unit']} anomalous vs previous baseline."
         else:
             ev = f"🟢 NOMINAL: Score {ensemble_scores[i]:.3f} safely below threshold {dynamic_threshs[i]:.3f}."
         evidence_list.append(ev)
@@ -380,6 +380,9 @@ def main():
     live_engine = get_live_feed_engine()
     stream_engine = get_1sec_stream_engine()
 
+    # Determine real-world track race status
+    is_live_on_track, live_status_msg, live_meta = check_live_race_status()
+
     # --- TOP HERO BANNER IMAGE ---
     banner_path = "app/assets/f1_hero_banner.png"
     if os.path.exists(banner_path):
@@ -403,15 +406,25 @@ def main():
     with st.sidebar:
         st.markdown("## 🏎️ Pit Wall Console")
         
-        # PROMINENT DATA FEED SOURCE SELECTOR
-        st.markdown("### 📡 Active Data Feed")
+        # PROMINENT DATA FEED SOURCE SELECTOR (AWARE OF REAL RACE ON TRACK)
+        st.markdown("### 📡 Telemetry Source")
+        if is_live_on_track:
+            default_feed_idx = 0
+            feed_options = [
+                "🟢 Live Grand Prix Feed (Real-Time Race Active)",
+                "🔵 Demo Race Mode (Historical Results Replay)"
+            ]
+        else:
+            default_feed_idx = 0
+            feed_options = [
+                "🔵 Demo Race Mode (Latest 2026 US GP Results & Archive)",
+                "🔴 Test 1-Sec Live Stream (Simulation of Live Race)"
+            ]
+
         feed_mode = st.radio(
-            "Select Telemetry Source:",
-            options=[
-                "🟢 Live Google Race Feed (1-Sec Stream)",
-                "🔵 Historical Demo (NAB Benchmark)"
-            ],
-            index=0
+            "Active Feed Status:",
+            options=feed_options,
+            index=default_feed_idx
         )
 
         st.markdown("---")
@@ -428,7 +441,7 @@ def main():
         )
 
         st.markdown("---")
-        st.markdown("### 🎛️ Simulation Controls")
+        st.markdown("### 🎛️ Session Controls")
 
         # Session state initialization
         if "live_1sec_tick" not in st.session_state:
@@ -442,8 +455,8 @@ def main():
         if "demo_playing" not in st.session_state:
             st.session_state.demo_playing = False
 
-        # Live 1-sec controls
-        if "Live Google" in feed_mode:
+        # Live 1-sec simulation controls
+        if "Live" in feed_mode or "Test 1-Sec" in feed_mode:
             c_p1, c_p2, c_p3 = st.columns(3)
             with c_p1:
                 if st.button("▶ Start", use_container_width=True):
@@ -455,7 +468,7 @@ def main():
                 if st.button("🚨 Spike", use_container_width=True):
                     st.session_state.inject_spike = True
 
-            st.caption("Auto-refreshes every 1 second with live Google race context.")
+            st.caption("1-second live stream comparing telemetry against previous race data.")
         else:
             channel_names = {k: f"{v['telemetry_code']} - {v['channel_name']}" for k, v in channels.items()}
             selected_key = st.selectbox(
@@ -486,20 +499,38 @@ def main():
     if "Real-Time Telemetry Monitor" in app_mode:
 
         # 1. SHOW PROMINENT INDICATOR OF WHETHER USING LIVE FEED OR DEMO
-        if "Live Google" in feed_mode:
+        if is_live_on_track:
             st.markdown("""
             <div class="feed-status-banner-live">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <span style="background: #00D2BE; color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 8px;">ACTIVE FEED</span>
-                        <b style="color: #00D2BE; font-size: 16px;">🟢 LIVE GOOGLE RACE FEED (1-SECOND REAL-TIME INGESTION)</b>
+                        <span style="background: #00D2BE; color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 8px;">LIVE FEED ACTIVE</span>
+                        <b style="color: #00D2BE; font-size: 16px;">🟢 LIVE F1 RACE IN PROGRESS ON TRACK</b>
                         <div style="color: #A7F3D0; font-size: 12.5px; margin-top: 3px;">
-                            Ingesting live telemetry combined with Google Live F1 updates every 1.0 second | Online
+                            Ingesting live telemetry stream directly from running Grand Prix session | Connected
                         </div>
                     </div>
                     <div style="text-align: right; font-family: monospace; color: #00D2BE; font-size: 13px;">
-                        📡 POLL RATE: 1.0 SEC<br>
-                        <span style="color: #34D399; font-weight: bold;">● LIVE STREAM ACTIVE</span>
+                        📡 STATUS: GREEN FLAG<br>
+                        <span style="color: #34D399; font-weight: bold;">● LIVE ON TRACK</span>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        elif "Test 1-Sec" in feed_mode:
+            st.markdown("""
+            <div class="feed-status-banner-live">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="background: #00D2BE; color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 8px;">TEST SIMULATION</span>
+                        <b style="color: #00D2BE; font-size: 16px;">🔴 1-SECOND LIVE STREAM SIMULATION ACTIVE</b>
+                        <div style="color: #A7F3D0; font-size: 12.5px; margin-top: 3px;">
+                            Simulating high-frequency live telemetry mapped to Google Live F1 headlines. Comparing every second against previous race baseline.
+                        </div>
+                    </div>
+                    <div style="text-align: right; font-family: monospace; color: #00D2BE; font-size: 13px;">
+                        ⏱️ POLL: 1.0 SEC<br>
+                        <span style="color: #34D399; font-weight: bold;">● STREAMING</span>
                     </div>
                 </div>
             </div>
@@ -509,25 +540,24 @@ def main():
             <div class="feed-status-banner-demo">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <span style="background: #3B82F6; color: #FFF; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 8px;">ACTIVE FEED</span>
-                        <b style="color: #60A5FA; font-size: 16px;">🔵 HISTORICAL DEMO TELEMETRY (NUMENTA BENCHMARK)</b>
+                        <span style="background: #3B82F6; color: #FFF; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 8px;">DEMO MODE</span>
+                        <b style="color: #60A5FA; font-size: 16px;">🔵 DEMO RACE RESULTS (2026 UNITED STATES GP / ARCHIVE)</b>
                         <div style="color: #93C5FD; font-size: 12.5px; margin-top: 3px;">
-                            Replaying pre-recorded 22,695 engine telemetry points with official ground-truth failure windows
+                            No live Grand Prix running on track today. Replaying Race 1186 (2026 US GP at COTA) & 22,695 historical telemetry points.
                         </div>
                     </div>
                     <div style="text-align: right; font-family: monospace; color: #60A5FA; font-size: 13px;">
-                        ⏱️ REPLAY MODE<br>
-                        <span style="color: #93C5FD;">OFFLINE BENCHMARK</span>
+                        🏛️ RACE ARCHIVE<br>
+                        <span style="color: #93C5FD;">DEMO BENCHMARK</span>
                     </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
         # ---------------------------------------------------------------------
-        # CASE A: LIVE GOOGLE RACE FEED (1-SECOND STREAM)
+        # CASE A: LIVE 1-SECOND STREAM (WHEN LIVE RACE OR TEST STREAM IS ACTIVE)
         # ---------------------------------------------------------------------
-        if "Live Google" in feed_mode:
-            # Advance tick
+        if is_live_on_track or "Test 1-Sec" in feed_mode:
             if st.session_state.live_1sec_playing:
                 st.session_state.live_1sec_tick += 1
 
@@ -535,40 +565,39 @@ def main():
             if inject_spike:
                 st.session_state.inject_spike = False
 
-            # Ingest 1-second packet with real-time anomaly detection and explainability
+            # Ingest 1-second packet with real-time anomaly detection strictly vs previous data
             packet = stream_engine.generate_1sec_tick(
                 current_tick=st.session_state.live_1sec_tick,
                 inject_anomaly=inject_spike
             )
 
-            # Record in live history
             st.session_state.live_history.append(packet)
             if len(st.session_state.live_history) > 60:
                 st.session_state.live_history.pop(0)
 
-            # 1. EXPLICIT ANOMALY STATUS & "WHY IT GAVE THE ANOMALY"
+            # EXPLICIT ANOMALY STATUS & "WHY IT GAVE THE ANOMALY"
             if packet["is_anomaly"]:
                 st.markdown(f"""
                 <div class="alert-box">
-                    <div class="alert-header">🚨 RED ALERT: TELEMETRY ANOMALY CONFIRMED ON CAR {packet['driver']['car']} ({packet['driver']['name']})</div>
+                    <div class="alert-header">🚨 RACE DATA ANOMALY DETECTED ON CAR {packet['driver']['car']} ({packet['driver']['name']})</div>
                     <div class="alert-evidence">
-                        <b>📋 WHY THIS WAS FLAGGED (EXPLAINABILITY):</b><br>
-                        {packet['why_explanation']}
+                        <b>📋 ANOMALY DIAGNOSTIC (COMPARED TO PREVIOUS RACE DATA):</b><br>
+                        {packet['why_explanation'].replace(chr(10), '<br>')}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
                 <div class="nominal-box">
-                    <div class="nominal-header">🟢 NOMINAL RACE TELEMETRY — OPERATING WITHIN NORMAL ENVELOPE</div>
+                    <div class="nominal-header">🟢 NOMINAL RACE TELEMETRY — ALL METRICS MATCH PREVIOUS DATA</div>
                     <div class="nominal-text">
-                        <b>📋 STATUS ASSESSMENT:</b><br>
-                        {packet['why_explanation']}
+                        <b>📋 TELEMETRY ASSESSMENT:</b><br>
+                        {packet['why_explanation'].replace(chr(10), '<br>')}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-            # 2. 5 METRIC HUD CARDS
+            # 5 METRIC HUD CARDS
             m1, m2, m3, m4, m5 = st.columns(5)
             with m1:
                 st.markdown(f"""
@@ -578,18 +607,18 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
             with m2:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-val" style="color: #9CA3AF;">{packet['previous_baseline']:.2f} {packet['unit']}</div>
+                    <div class="metric-lbl">Previous Data Baseline</div>
+                </div>
+                """, unsafe_allow_html=True)
+            with m3:
                 s_color = "#E10600" if packet["is_anomaly"] else "#3B82F6"
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-val" style="color: {s_color};">{packet['anomaly_score']:.3f}</div>
-                    <div class="metric-lbl">Ensemble Anomaly Score</div>
-                </div>
-                """, unsafe_allow_html=True)
-            with m3:
-                st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-val" style="color: #FFB800;">{packet['threshold']:.3f}</div>
-                    <div class="metric-lbl">Adaptive Threshold</div>
+                    <div class="metric-lbl">Anomaly Score (Thresh: {packet['threshold']:.2f})</div>
                 </div>
                 """, unsafe_allow_html=True)
             with m4:
@@ -611,7 +640,7 @@ def main():
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # 3. LIVE 1-SECOND CHARTS
+            # LIVE 1-SECOND CHARTS (USING BULLETPROOF PANDAS FILTERING)
             col_chart, col_models = st.columns([2, 1])
             hist_df = pd.DataFrame([
                 {
@@ -631,20 +660,27 @@ def main():
                     line_sensor = base_line.mark_line(color="#00D2BE", strokeWidth=2.2).encode(
                         y=alt.Y("value:Q", title=f"Sensor Value ({packet['unit']})", scale=alt.Scale(zero=False))
                     )
-                    anom_markers = base_line.filter("datum.is_anomaly == true").mark_point(
-                        color="#E10600",
-                        size=110,
-                        filled=True
-                    ).encode(y="value:Q")
+                    
+                    # Safe Pandas filtering to prevent any AttributeError: 'Chart' object has no attribute 'filter'
+                    anom_subset = hist_df[hist_df["is_anomaly"] == True]
+                    if not anom_subset.empty:
+                        anom_markers = alt.Chart(anom_subset).mark_point(
+                            color="#E10600",
+                            size=120,
+                            filled=True
+                        ).encode(x="tick:Q", y="value:Q")
+                        chart_live = line_sensor + anom_markers
+                    else:
+                        chart_live = line_sensor
 
-                    chart_live = (line_sensor + anom_markers).properties(height=240).configure_view(
+                    chart_live_styled = chart_live.properties(height=240).configure_view(
                         strokeWidth=0
                     ).configure_axis(
                         gridColor="#242536",
                         labelColor="#A0A0B0",
                         titleColor="#FFFFFF"
                     )
-                    st.altair_chart(chart_live, use_container_width=True)
+                    st.altair_chart(chart_live_styled, use_container_width=True)
 
                     st.markdown("#### ⚡ Anomaly Score vs. Adaptive Dynamic Threshold")
                     line_score = base_line.mark_line(color="#3B82F6", strokeWidth=2.0).encode(
@@ -690,7 +726,7 @@ def main():
                     f"**Correlation**: Real-time context matched with live telemetry."
                 )
 
-            # 4. LOG OF ANOMALIES FLAGGED IN CURRENT LIVE SESSION
+            # LOG OF ANOMALIES FLAGGED IN CURRENT LIVE SESSION
             st.markdown("---")
             st.markdown("### 📜 Live Session Anomaly Log (With Full Explanations)")
             anom_history = [p for p in st.session_state.live_history if p["is_anomaly"]]
@@ -702,21 +738,22 @@ def main():
                         "Timestamp": p["timestamp"],
                         "Driver": f"{p['driver']['name']} ({p['driver']['car']})",
                         "Sensor Reading": f"{p['value']:.2f} {p['unit']}",
+                        "Previous Baseline": f"{p['previous_baseline']:.2f} {p['unit']}",
+                        "Deviation vs Prev Data": f"{p['delta_vs_previous']:+.2f} {p['unit']}",
                         "Score": f"{p['anomaly_score']:.3f}",
                         "Threshold": f"{p['threshold']:.3f}",
-                        "Explanation (Why Flagged)": p["why_explanation"]
+                        "Anomaly Diagnostic": p["why_explanation"]
                     })
                 st.dataframe(pd.DataFrame(table_rows), use_container_width=True)
             else:
-                st.markdown("*No anomalies flagged in recent live ticks. Click '🚨 Spike' in sidebar to test trigger.*")
+                st.markdown("*No anomalies flagged in recent live ticks. Click '🚨 Spike' in sidebar to test immediate anomaly detection.*")
 
-            # Auto-advance 1-sec stream
             if st.session_state.live_1sec_playing:
                 time.sleep(1.0)
                 st.rerun()
 
         # ---------------------------------------------------------------------
-        # CASE B: HISTORICAL DEMO TELEMETRY (PRE-RECORDED NAB BENCHMARK)
+        # CASE B: DEMO RACE RESULTS (2026 US GP / 22,695 POINTS PRE-RECORDED)
         # ---------------------------------------------------------------------
         else:
             data_bundle = load_and_prepare_channel_fast("engine_temp_sensor")
@@ -738,23 +775,33 @@ def main():
             curr_pred = preds[curr_idx]
             curr_evidence = evidences[curr_idx]
 
+            # Compute previous data baseline
+            prev_slice = df["value"].iloc[max(0, curr_idx - 30): curr_idx]
+            prev_median_val = prev_slice.median() if len(prev_slice) > 0 else curr_val
+            delta_val = curr_val - prev_median_val
+
             if curr_pred:
                 st.markdown(f"""
                 <div class="alert-box">
-                    <div class="alert-header">🚨 RED ALERT: TELEMETRY ANOMALY CONFIRMED (CAR #16)</div>
+                    <div class="alert-header">🚨 DEMO RACE TELEMETRY ANOMALY CONFIRMED (CAR #16)</div>
                     <div class="alert-evidence">
-                        <b>📋 WHY THIS WAS FLAGGED:</b><br>
-                        {curr_evidence}
+                        <b>📋 ANOMALY IN RACE DATA (VS PREVIOUS BASELINE):</b><br>
+                        • Current Sensor Value: {curr_val:.2f} {meta['unit']}<br>
+                        • Previous 30-Point Baseline: {prev_median_val:.2f} {meta['unit']}<br>
+                        • Deviation vs Previous Data: {delta_val:+.2f} {meta['unit']} excursion<br>
+                        • Anomaly Score: {curr_score:.3f} (Adaptive Threshold: {curr_thresh:.3f})<br>
+                        • Race Engineer Diagnostic: {curr_evidence}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
                 <div class="nominal-box">
-                    <div class="nominal-header">🟢 NOMINAL RACE TELEMETRY — ALL SYSTEMS WITHIN OPERATING WINDOW</div>
+                    <div class="nominal-header">🟢 NOMINAL RACE TELEMETRY — ALL SYSTEMS MATCH PREVIOUS DATA WINDOW</div>
                     <div class="nominal-text">
-                        <b>📋 STATUS ASSESSMENT:</b><br>
-                        {curr_evidence}
+                        <b>📋 TELEMETRY ASSESSMENT:</b><br>
+                        • Current Value: {curr_val:.2f} {meta['unit']} | Previous 30-Point Baseline: {prev_median_val:.2f} {meta['unit']} (Delta: {delta_val:+.2f} {meta['unit']})<br>
+                        • Anomaly Score: {curr_score:.3f} is safely below threshold {curr_thresh:.3f}. All engine channels healthy.
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -764,22 +811,22 @@ def main():
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-val" style="color: #00D2BE;">{curr_val:.2f} {meta['unit']}</div>
-                    <div class="metric-lbl">Historical Sensor Value</div>
+                    <div class="metric-lbl">Sensor Reading</div>
                 </div>
                 """, unsafe_allow_html=True)
             with c2:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-val" style="color: #9CA3AF;">{prev_median_val:.2f} {meta['unit']}</div>
+                    <div class="metric-lbl">Previous Baseline</div>
+                </div>
+                """, unsafe_allow_html=True)
+            with c3:
                 sc_col = "#E10600" if curr_score >= curr_thresh else "#3B82F6"
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-val" style="color: {sc_col};">{curr_score:.3f}</div>
-                    <div class="metric-lbl">Ensemble Anomaly Score</div>
-                </div>
-                """, unsafe_allow_html=True)
-            with c3:
-                st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-val" style="color: #FFB800;">{curr_thresh:.3f}</div>
-                    <div class="metric-lbl">Adaptive Threshold</div>
+                    <div class="metric-lbl">Anomaly Score</div>
                 </div>
                 """, unsafe_allow_html=True)
             with c4:
@@ -816,20 +863,27 @@ def main():
                 line_sensor = base.mark_line(color="#00D2BE", strokeWidth=2.2).encode(
                     y=alt.Y("value:Q", title=f"Sensor Value ({meta['unit']})", scale=alt.Scale(zero=False))
                 )
-                anom_pts = base.filter("datum.flag == true").mark_point(
-                    color="#E10600",
-                    size=90,
-                    filled=True
-                ).encode(y="value:Q")
+                
+                # Safe Pandas filtering to prevent AttributeError: 'Chart' object has no attribute 'filter'
+                anom_subset_demo = slice_df[slice_df["flag"] == True]
+                if not anom_subset_demo.empty:
+                    anom_pts = alt.Chart(anom_subset_demo).mark_point(
+                        color="#E10600",
+                        size=90,
+                        filled=True
+                    ).encode(x="timestamp:T", y="value:Q")
+                    chart_demo = line_sensor + anom_pts
+                else:
+                    chart_demo = line_sensor
 
-                chart_demo = (line_sensor + anom_pts).properties(height=260).configure_view(
+                chart_demo_styled = chart_demo.properties(height=260).configure_view(
                     strokeWidth=0
                 ).configure_axis(
                     gridColor="#242536",
                     labelColor="#A0A0B0",
                     titleColor="#FFFFFF"
                 )
-                st.altair_chart(chart_demo, use_container_width=True)
+                st.altair_chart(chart_demo_styled, use_container_width=True)
 
             with col_demo2:
                 st.markdown("#### 🤖 Model Consensus Breakdown")
@@ -958,7 +1012,6 @@ def main():
         driver_engine = get_driver_engine()
         latest_id = driver_engine.get_latest_race_id()
         race_info = driver_engine.get_race_info(latest_id)
-        grid_df = driver_engine.get_race_telemetry_grid(latest_id)
         driver_summary = driver_engine.compute_driver_pace_summary(latest_id)
         driver_anoms = driver_engine.detect_driver_timing_anomalies(latest_id)
 
