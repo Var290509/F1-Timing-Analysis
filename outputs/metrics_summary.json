@@ -25,17 +25,17 @@
       "TP": 2,
       "FP": 8,
       "FN": 2,
-      "Inference Latency (ms)": 0.791
+      "Inference Latency (ms)": 0.661
     },
     {
       "Model": "Hybrid_Ensemble",
-      "Event-F1": 0.0899,
-      "Precision": 0.0471,
+      "Event-F1": 0.0909,
+      "Precision": 0.0476,
       "Recall": 1.0,
       "Detection Delay (pts)": 83.25,
       "Detection Delay (min)": 416.25,
       "TP": 4,
-      "FP": 81,
+      "FP": 80,
       "FN": 0,
       "Inference Latency (ms)": 0.0
     },
@@ -49,7 +49,7 @@
       "TP": 4,
       "FP": 81,
       "FN": 0,
-      "Inference Latency (ms)": 2.763
+      "Inference Latency (ms)": 2.821
     },
     {
       "Model": "Isolation_Forest",
@@ -61,7 +61,7 @@
       "TP": 4,
       "FP": 336,
       "FN": 0,
-      "Inference Latency (ms)": 40.001
+      "Inference Latency (ms)": 4.726
     },
     {
       "Model": "OneClass_SVM",
@@ -73,7 +73,7 @@
       "TP": 4,
       "FP": 536,
       "FN": 0,
-      "Inference Latency (ms)": 1.415
+      "Inference Latency (ms)": 1.4
     },
     {
       "Model": "Local_Outlier_Factor",
@@ -85,7 +85,7 @@
       "TP": 4,
       "FP": 1100,
       "FN": 0,
-      "Inference Latency (ms)": 43.48
+      "Inference Latency (ms)": 21.807
     }
   ]
 }

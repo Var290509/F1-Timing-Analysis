@@ -34,6 +34,13 @@ from scripts.generate_visualizations import (
     plot_confusion_breakdown,
     plot_zoom_in_cases
 )
+from scripts.generate_historical_plots import (
+    plot_historical_reliability_evolution,
+    plot_historical_pitstop_evolution,
+    plot_current_vs_historical_changes
+)
+from scripts.export_historical_json import export_historical_metrics
+from src.historical_engine import F1HistoricalEngine
 
 
 def run_pipeline(
@@ -228,6 +235,13 @@ def run_pipeline(
         meta=meta,
         output_path=os.path.join(plots_dir, "zoom_in_cases.png")
     )
+
+    # Step 7: Historical 1950-2026 Engine Integration
+    print("\n[STEP 7/7] Integrating 76 Seasons of F1 Historical Data (1950-2026)...")
+    export_historical_metrics(os.path.join(output_dir, "f1_historical_comparison.json"))
+    plot_historical_reliability_evolution(os.path.join(plots_dir, "historical_reliability_evolution.png"))
+    plot_historical_pitstop_evolution(os.path.join(plots_dir, "historical_pitstop_evolution.png"))
+    plot_current_vs_historical_changes(os.path.join(plots_dir, "current_vs_historical_changes.png"))
 
     print("\n🎯 All pipeline stages successfully executed!")
     return predictions_df, eval_df

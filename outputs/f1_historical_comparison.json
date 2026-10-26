@@ -1,0 +1,431 @@
+{
+  "eras_overview": {
+    "PIONEER_ERA": {
+      "name": "Pioneer & Front-Engine Era",
+      "years": [
+        1950,
+        1965
+      ],
+      "engine_spec": "4.5L Atmospheric / 1.5L Supercharged / 1.5L NA",
+      "weight_min_kg": 450,
+      "thermal_efficiency_pct": 18.0,
+      "aero_type": "Streamlined cigar bodies, zero wings, drum & early disc brakes",
+      "key_characteristics": "Front-engine transitioning to rear-engine, manual stick-shift, no seatbelts or rollbars, high mechanical mortality."
+    },
+    "DFV_WINGS_ERA": {
+      "name": "Cosworth DFV & Wings Revolution",
+      "years": [
+        1966,
+        1976
+      ],
+      "engine_spec": "3.0L Naturally Aspirated V8 (Ford Cosworth DFV dominance)",
+      "weight_min_kg": 530,
+      "thermal_efficiency_pct": 24.0,
+      "aero_type": "Inverted aerofoil wings mounted on suspension uprights, wide slick tyres",
+      "key_characteristics": "Introduction of sponsor liveries, downforce aerodynamics, wide tyres, commercial racing explosion."
+    },
+    "TURBO_MONSTERS_ERA": {
+      "name": "Ground Effect & 1.5L Turbo Era",
+      "years": [
+        1977,
+        1988
+      ],
+      "engine_spec": "1.5L Turbocharged (Qualifying boost > 5.5 bar, 1,400+ HP)",
+      "weight_min_kg": 540,
+      "thermal_efficiency_pct": 28.0,
+      "aero_type": "Underbody sliding skirts, massive downforce tunnels, active suspension emergence",
+      "key_characteristics": "Extreme turbo lag, dangerous qualifying engines lasting 2 laps, carbon-fibre monocoque introduction (McLaren MP4/1)."
+    },
+    "V10_HIGH_REV_ERA": {
+      "name": "Naturally Aspirated Screaming V10 Era",
+      "years": [
+        1989,
+        2005
+      ],
+      "engine_spec": "3.5L / 3.0L Naturally Aspirated V10 (19,000+ RPM)",
+      "weight_min_kg": 605,
+      "thermal_efficiency_pct": 31.0,
+      "aero_type": "Raised nosecones, bargeboards, complex multi-element diffusers, grooved tyres (1998)",
+      "key_characteristics": "Mid-race refueling strategies, electronic traction control, instantaneous gear shifts, screaming acoustic engine note."
+    },
+    "V8_AERO_KERS_ERA": {
+      "name": "V8 Aerodynamic Refinement & DRS Era",
+      "years": [
+        2006,
+        2013
+      ],
+      "engine_spec": "2.4L Naturally Aspirated V8 (18,000 RPM rev limit)",
+      "weight_min_kg": 642,
+      "thermal_efficiency_pct": 34.0,
+      "aero_type": "Double diffusers, blown exhaust diffusers, DRS overtaking rear wing (2011)",
+      "key_characteristics": "Introduction of KERS kinetic electrical boost (2009), Pirelli deliberate tyre degradation cliff, aerodynamic peak."
+    },
+    "TURBO_HYBRID_GEN1": {
+      "name": "1.6L V6 Turbo-Hybrid Era (Gen 1)",
+      "years": [
+        2014,
+        2021
+      ],
+      "engine_spec": "1.6L Turbo V6 with MGU-K (120 kW) and MGU-H (Unlimited exhaust energy)",
+      "weight_min_kg": 752,
+      "thermal_efficiency_pct": 50.0,
+      "aero_type": "Wide track (2017), simplified front wings (2019), titanium Halo cockpit safety device (2018)",
+      "key_characteristics": "Over 50% thermal efficiency, massive electrical torque, all-time track lap records set (2020), Mercedes 8-year dominance."
+    },
+    "CURRENT_GROUND_EFFECT": {
+      "name": "Modern Ground-Effect & Cost Cap Era (Current Game)",
+      "years": [
+        2022,
+        2026
+      ],
+      "engine_spec": "1.6L Turbo V6 Hybrid, E10 10% sustainable ethanol fuel, engine freeze",
+      "weight_min_kg": 798,
+      "thermal_efficiency_pct": 52.5,
+      "aero_type": "Full Venturi underfloor ground-effect tunnels, 18-inch low-profile Pirelli tyres, wheel wake deflectors",
+      "key_characteristics": "Strict $135M financial budget cap, aerodynamic testing restriction (ATR) handicap, wake-reduction rules for close racing, extreme grid compression."
+    }
+  },
+  "reliability_evolution_by_era": [
+    {
+      "era": "Pioneer (1950-65)",
+      "total_entries": 3339,
+      "mechanical_dnfs": 1492,
+      "crash_dnfs": 239,
+      "finished": 1608,
+      "mech_dnf_pct": 44.68,
+      "crash_dnf_pct": 7.16,
+      "finish_pct": 48.16
+    },
+    {
+      "era": "DFV Wings (1966-76)",
+      "total_entries": 3237,
+      "mechanical_dnfs": 1393,
+      "crash_dnfs": 305,
+      "finished": 1539,
+      "mech_dnf_pct": 43.03,
+      "crash_dnf_pct": 9.42,
+      "finish_pct": 47.54
+    },
+    {
+      "era": "Turbo Monsters (1977-88)",
+      "total_entries": 5234,
+      "mechanical_dnfs": 2486,
+      "crash_dnfs": 620,
+      "finished": 2128,
+      "mech_dnf_pct": 47.5,
+      "crash_dnf_pct": 11.85,
+      "finish_pct": 40.66
+    },
+    {
+      "era": "V10 Screamer (1989-05)",
+      "total_entries": 7035,
+      "mechanical_dnfs": 2537,
+      "crash_dnfs": 982,
+      "finished": 3516,
+      "mech_dnf_pct": 36.06,
+      "crash_dnf_pct": 13.96,
+      "finish_pct": 49.98
+    },
+    {
+      "era": "V8 DRS/KERS (2006-13)",
+      "total_entries": 3288,
+      "mechanical_dnfs": 420,
+      "crash_dnfs": 323,
+      "finished": 2545,
+      "mech_dnf_pct": 12.77,
+      "crash_dnf_pct": 9.82,
+      "finish_pct": 77.4
+    },
+    {
+      "era": "V6 Hybrid Gen1 (2014-21)",
+      "total_entries": 3267,
+      "mechanical_dnfs": 389,
+      "crash_dnfs": 218,
+      "finished": 2660,
+      "mech_dnf_pct": 11.91,
+      "crash_dnf_pct": 6.67,
+      "finish_pct": 81.42
+    },
+    {
+      "era": "Current Ground Effect (2022-26)",
+      "total_entries": 2234,
+      "mechanical_dnfs": 199,
+      "crash_dnfs": 144,
+      "finished": 1891,
+      "mech_dnf_pct": 8.91,
+      "crash_dnf_pct": 6.45,
+      "finish_pct": 84.65
+    }
+  ],
+  "pitstop_evolution_by_year": [
+    {
+      "year": 1994,
+      "pit_count": 446,
+      "median_duration_s": 30.26,
+      "mean_duration_s": 31.27,
+      "fastest_stop_s": 14.01
+    },
+    {
+      "year": 1995,
+      "pit_count": 566,
+      "median_duration_s": 30.82,
+      "mean_duration_s": 32.53,
+      "fastest_stop_s": 13.04
+    },
+    {
+      "year": 1996,
+      "pit_count": 436,
+      "median_duration_s": 30.2,
+      "mean_duration_s": 31.03,
+      "fastest_stop_s": 19.33
+    },
+    {
+      "year": 1997,
+      "pit_count": 487,
+      "median_duration_s": 28.59,
+      "mean_duration_s": 29.27,
+      "fastest_stop_s": 11.56
+    },
+    {
+      "year": 1998,
+      "pit_count": 429,
+      "median_duration_s": 28.98,
+      "mean_duration_s": 29.17,
+      "fastest_stop_s": 11.24
+    },
+    {
+      "year": 1999,
+      "pit_count": 438,
+      "median_duration_s": 29.04,
+      "mean_duration_s": 29.67,
+      "fastest_stop_s": 11.37
+    },
+    {
+      "year": 2000,
+      "pit_count": 529,
+      "median_duration_s": 29.88,
+      "mean_duration_s": 30.5,
+      "fastest_stop_s": 19.36
+    },
+    {
+      "year": 2001,
+      "pit_count": 464,
+      "median_duration_s": 31.01,
+      "mean_duration_s": 31.33,
+      "fastest_stop_s": 13.08
+    },
+    {
+      "year": 2002,
+      "pit_count": 486,
+      "median_duration_s": 30.71,
+      "mean_duration_s": 31.33,
+      "fastest_stop_s": 14.16
+    },
+    {
+      "year": 2003,
+      "pit_count": 608,
+      "median_duration_s": 30.65,
+      "mean_duration_s": 30.7,
+      "fastest_stop_s": 14.7
+    },
+    {
+      "year": 2004,
+      "pit_count": 839,
+      "median_duration_s": 24.75,
+      "mean_duration_s": 25.22,
+      "fastest_stop_s": 11.04
+    },
+    {
+      "year": 2005,
+      "pit_count": 704,
+      "median_duration_s": 24.98,
+      "mean_duration_s": 25.72,
+      "fastest_stop_s": 11.09
+    },
+    {
+      "year": 2006,
+      "pit_count": 660,
+      "median_duration_s": 24.58,
+      "mean_duration_s": 25.07,
+      "fastest_stop_s": 10.16
+    },
+    {
+      "year": 2007,
+      "pit_count": 660,
+      "median_duration_s": 27.65,
+      "mean_duration_s": 28.1,
+      "fastest_stop_s": 12.67
+    },
+    {
+      "year": 2008,
+      "pit_count": 638,
+      "median_duration_s": 28.19,
+      "mean_duration_s": 28.63,
+      "fastest_stop_s": 14.56
+    },
+    {
+      "year": 2009,
+      "pit_count": 601,
+      "median_duration_s": 25.13,
+      "mean_duration_s": 25.38,
+      "fastest_stop_s": 8.76
+    },
+    {
+      "year": 2010,
+      "pit_count": 583,
+      "median_duration_s": 23.37,
+      "mean_duration_s": 24.64,
+      "fastest_stop_s": 12.3
+    },
+    {
+      "year": 2011,
+      "pit_count": 1111,
+      "median_duration_s": 22.36,
+      "mean_duration_s": 23.51,
+      "fastest_stop_s": 12.9
+    },
+    {
+      "year": 2012,
+      "pit_count": 945,
+      "median_duration_s": 22.25,
+      "mean_duration_s": 23.25,
+      "fastest_stop_s": 13.2
+    },
+    {
+      "year": 2013,
+      "pit_count": 944,
+      "median_duration_s": 22.87,
+      "mean_duration_s": 23.56,
+      "fastest_stop_s": 13.27
+    },
+    {
+      "year": 2014,
+      "pit_count": 789,
+      "median_duration_s": 24.22,
+      "mean_duration_s": 24.89,
+      "fastest_stop_s": 16.12
+    },
+    {
+      "year": 2015,
+      "pit_count": 734,
+      "median_duration_s": 24.21,
+      "mean_duration_s": 25.11,
+      "fastest_stop_s": 16.13
+    },
+    {
+      "year": 2016,
+      "pit_count": 909,
+      "median_duration_s": 23.79,
+      "mean_duration_s": 24.53,
+      "fastest_stop_s": 16.22
+    },
+    {
+      "year": 2017,
+      "pit_count": 673,
+      "median_duration_s": 23.58,
+      "mean_duration_s": 24.16,
+      "fastest_stop_s": 14.94
+    },
+    {
+      "year": 2018,
+      "pit_count": 535,
+      "median_duration_s": 23.65,
+      "mean_duration_s": 24.61,
+      "fastest_stop_s": 15.0
+    },
+    {
+      "year": 2019,
+      "pit_count": 647,
+      "median_duration_s": 23.52,
+      "mean_duration_s": 24.78,
+      "fastest_stop_s": 15.07
+    },
+    {
+      "year": 2020,
+      "pit_count": 531,
+      "median_duration_s": 24.16,
+      "mean_duration_s": 25.31,
+      "fastest_stop_s": 16.36
+    },
+    {
+      "year": 2021,
+      "pit_count": 681,
+      "median_duration_s": 23.62,
+      "mean_duration_s": 24.71,
+      "fastest_stop_s": 14.88
+    },
+    {
+      "year": 2022,
+      "pit_count": 750,
+      "median_duration_s": 23.68,
+      "mean_duration_s": 24.56,
+      "fastest_stop_s": 13.97
+    },
+    {
+      "year": 2023,
+      "pit_count": 802,
+      "median_duration_s": 23.65,
+      "mean_duration_s": 24.54,
+      "fastest_stop_s": 16.25
+    },
+    {
+      "year": 2024,
+      "pit_count": 769,
+      "median_duration_s": 23.28,
+      "mean_duration_s": 24.69,
+      "fastest_stop_s": 15.79
+    },
+    {
+      "year": 2025,
+      "pit_count": 819,
+      "median_duration_s": 23.11,
+      "mean_duration_s": 23.32,
+      "fastest_stop_s": 12.8
+    },
+    {
+      "year": 2026,
+      "pit_count": 646,
+      "median_duration_s": 24.01,
+      "mean_duration_s": 24.88,
+      "fastest_stop_s": 12.09
+    }
+  ],
+  "current_game_transformation_pillars": [
+    {
+      "pillar": "1. Aerodynamic Architecture: Ground-Effect Tunnels",
+      "historical_state": "Over-body wings and aggressive bargeboards created massive turbulent 'dirty air' wake. Following car lost 35% downforce at 20m and 46% at 10m, making close following almost impossible without tyre destruction.",
+      "current_game_state": "Full Venturi underbody tunnels generate the majority of downforce via ground effect. Turbulent upwash throws dirty air over following cars; trailing car loses only 18% downforce at 10m, enabling wheel-to-wheel battles across multiple laps.",
+      "telemetry_implication": "Micro-sector pace delta anomalies during close racing are now strategic tyre conservation choices rather than unavoidable wake turbulence dropouts."
+    },
+    {
+      "pillar": "2. Powertrain Thermal Efficiency: 52% Turbo-Hybrid",
+      "historical_state": "Naturally aspirated V10/V8 engines (1989-2013) had thermal efficiencies between 28% and 34%, burning 160+ kg of fuel with high mechanical failure rates (36% to 47%).",
+      "current_game_state": "1.6L Turbo V6 Power Unit paired with 120 kW MGU-K and MGU-H achieves > 52% thermal efficiency\u2014the most efficient internal combustion engine on Earth\u2014limited to 110 kg of fuel for an entire race.",
+      "telemetry_implication": "Engine temperature anomalies are tightly constrained. A 3\u00b0C breach in ICE coolant triggers immediate MGU-K de-rate orders because drivers are strictly limited to 3-4 engines per 24-race season."
+    },
+    {
+      "pillar": "3. Vehicle Mass & Low-Profile 18-Inch Tyres",
+      "historical_state": "Cars weighed ~450 kg in the 1960s and 605 kg in the V10 era, riding on 13-inch high-sidewall tyres where the tyre sidewall provided most of the mechanical suspension cushioning.",
+      "current_game_state": "Current minimum weight is 798 kg (350+ kg heavier than early eras) due to the titanium Halo, reinforced carbon crash structures, and 100 kg hybrid battery pack. Riding on 18-inch low-profile Pirelli tyres.",
+      "telemetry_implication": "Heavier vehicle mass amplifies lateral tyre carcass thermal degradation. Tyre temperature telemetry spikes (TEL-TYR-04) signal catastrophic blistering significantly earlier."
+    },
+    {
+      "pillar": "4. Mechanical Reliability: From 50% Attrition to Aerospace Reliability",
+      "historical_state": "In 1977-1988, 47.5% of cars retired with mechanical failures (blown turbos, cracked blocks, failed gearboxes). In 1950-1965, 44.7% suffered mechanical DNFs.",
+      "current_game_state": "Mechanical DNF rate in the current 2022-2026 era has plummeted to 8.9%! Unscheduled retirements are overwhelmingly driver crashes or power unit component timeouts.",
+      "telemetry_implication": "An anomaly is no longer expected operating noise. Modern telemetry anomaly detection must flag microscopic sensor deviations (0.1% thresholds) before catastrophic failure occurs."
+    },
+    {
+      "pillar": "5. Pit Stop Speed: Sub-2-Second High-Precision Choreography",
+      "historical_state": "1950s pit stops took 40\u201380 seconds with manual copper wheel knock-off mallets. 1994\u20132009 refueling pit stops took 8.0\u201312.0 seconds.",
+      "current_game_state": "Wheel-only stops are completed in 1.80 to 2.80 seconds stationary. Pit lane transit time is rigidly deterministic (~23.5s total).",
+      "telemetry_implication": "A pit stop variance of +1.5 seconds is now a tactical anomaly that costs 3-4 positions during pit-stop undercuts."
+    },
+    {
+      "pillar": "6. Financial Parity & Grid Spread Compression",
+      "historical_state": "Top teams outspent backmarkers $450M vs $80M. Pole position was frequently 5 to 15 seconds faster than P10 in qualifying.",
+      "current_game_state": "Strict $135M cost cap and sliding-scale Aerodynamic Testing Restrictions (ATR handicap where championship leader gets less wind tunnel time). In Q3, the entire top 10 is separated by < 0.4 seconds.",
+      "telemetry_implication": "Milliseconds matter. A telemetry detection delay of 30 seconds allows the pit wall to switch engine mappings before a 0.2s/lap degradation costs a podium."
+    }
+  ]
+}

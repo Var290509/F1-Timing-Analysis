@@ -23,7 +23,21 @@
 
 ---
 
-### Slide 3: Data Architecture & NAB Telemetry Channel Mapping
+### Slide 3: Historical F1 Evolution (1950–2026) & The "Current Running Game"
+* **76 Seasons, 1,172 Grands Prix, 27,600+ Race Entries Integrated:**
+  * Sourced canonical F1 relational database spanning the entire history of the World Championship (1950 to 2026).
+* **The 6 Structural Changes in the Current Running Game:**
+  1. **Mechanical Attrition Collapse:** Mechanical DNF rate dropped from **47.5% (1980s Turbo era)** down to **8.9% (Current 2022–2026 era)**.
+  2. **Aerodynamics:** Dirty over-body wake $\to$ Venturi underfloor ground-effect tunnels (following downforce loss cut from 46% to 18%).
+  3. **Powertrain Thermal Efficiency:** 18% (1950s) / 31% (V10s) $\to$ **52.5% (1.6L V6 Turbo-Hybrid)**.
+  4. **Vehicle Mass:** 450 kg $\to$ **798 kg** (Halo crash structure + hybrid batteries).
+  5. **Pit Stop Speed:** 60s+ $\to$ **1.80s stationary record** (23.5s pit lane transit).
+  6. **Grid Compression:** From 10-second gaps in 1950 to **< 0.4 seconds covering the entire top 10** in 2026.
+* **Why This Matters for Anomaly Detection:** In 1980, engine thermal fluctuations were routine operating noise. In the current game, with strict 3-engine-per-season rules and sub-second margins, a 3°C deviation is an immediate tactical emergency.
+
+---
+
+### Slide 4: Data Architecture & NAB Telemetry Channel Mapping
 * **Benchmark Dataset:** Numenta Anomaly Benchmark (NAB) — the premier international gold standard for streaming anomaly detection.
 * **F1 Domain Channel Mapping:**
   1. `TEL-ENG-01 (machine_temperature)` $\to$ Internal Combustion Engine (ICE) Coolant & Cylinder Head Temperature (°C).
