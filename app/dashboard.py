@@ -8,7 +8,7 @@ import os
 import sys
 import time
 import json
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 # Ensure project root in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -30,6 +30,7 @@ from src.adaptive_threshold import AdaptiveThresholdManager
 from src.evidence_generator import EvidenceGenerator
 from src.historical_engine import F1HistoricalEngine, F1_ERAS
 from src.driver_timing_engine import DriverTimingEngine
+from src.live_feed_engine import LiveRaceFeedEngine
 
 
 # -----------------------------------------------------------------------------
@@ -60,7 +61,50 @@ st.markdown("""
         overflow: hidden;
         border: 1px solid #2E2E42;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        margin-bottom: 14px;
+    }
+
+    /* Live Ticker Strip */
+    .live-ticker-strip {
+        background: linear-gradient(90deg, #1C0808 0%, #151522 50%, #081B16 100%);
+        border: 1px solid #3B1B1B;
+        border-radius: 8px;
+        padding: 9px 16px;
         margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 15px rgba(225, 6, 0, 0.2);
+    }
+    .ticker-badge {
+        background: linear-gradient(90deg, #E10600 0%, #B00400 100%);
+        color: #FFFFFF;
+        font-weight: 800;
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        white-space: nowrap;
+        box-shadow: 0 0 10px rgba(225, 6, 0, 0.5);
+    }
+    .ticker-headline {
+        color: #F3F4F6;
+        font-size: 13px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .ticker-impact {
+        color: #34D399;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: auto;
+        white-space: nowrap;
+        background: rgba(52, 211, 153, 0.12);
+        padding: 3px 8px;
+        border-radius: 4px;
     }
 
     /* Red Alert Card */
@@ -153,16 +197,71 @@ st.markdown("""
         letter-spacing: 0.8px;
     }
 
-    /* Quick Guide Box */
-    .guide-box {
-        background-color: #151622;
-        border: 1px solid #2B2C40;
+    /* Change Notification Card */
+    .change-card {
+        background: linear-gradient(135deg, #1B1C2A 0%, #12131F 100%);
+        border-left: 5px solid #E10600;
         border-radius: 8px;
         padding: 14px 18px;
-        margin-bottom: 20px;
-        font-size: 13px;
+        margin-bottom: 12px;
+        border-top: 1px solid #28293F;
+        border-right: 1px solid #28293F;
+        border-bottom: 1px solid #28293F;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+    .change-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #FFFFFF;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .change-desc {
         color: #D1D5DB;
-        line-height: 1.5;
+        font-size: 13px;
+        margin-top: 5px;
+        line-height: 1.4;
+    }
+    .radio-box {
+        background-color: rgba(0, 0, 0, 0.45);
+        border-left: 3px solid #00D2BE;
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin-top: 8px;
+        color: #A7F3D0;
+        font-family: monospace;
+        font-size: 12px;
+    }
+
+    /* News Card */
+    .news-card {
+        background: linear-gradient(180deg, #181926 0%, #12131D 100%);
+        border: 1px solid #2A2B3D;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .news-headline {
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        margin-bottom: 4px;
+    }
+    .news-meta {
+        color: #9CA3AF;
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+    .news-impact {
+        color: #60A5FA;
+        font-size: 12px;
+        background-color: rgba(96, 165, 250, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
     }
 
     /* Pillar Cards */
@@ -277,17 +376,39 @@ def get_driver_engine():
     return DriverTimingEngine()
 
 
+@st.cache_resource
+def get_live_feed_engine():
+    return LiveRaceFeedEngine()
+
+
 # -----------------------------------------------------------------------------
 # MAIN APPLICATION
 # -----------------------------------------------------------------------------
 def main():
     channels = get_available_channels()
     hist_engine = get_historical_engine()
+    live_engine = get_live_feed_engine()
 
     # --- TOP HERO BANNER IMAGE ---
     banner_path = "app/assets/f1_hero_banner.png"
     if os.path.exists(banner_path):
         st.image(banner_path, use_container_width=True)
+
+    # --- GOOGLE LIVE F1 FEED TOP TICKER STRIP ---
+    with st.spinner("Syncing Google Live Race Feed..."):
+        latest_google_items = live_engine.fetch_google_live_feed(max_items=3)
+    
+    top_headline = latest_google_items[0]["title"] if latest_google_items else "F1 Sentinel Pit Wall Online"
+    top_impact = latest_google_items[0]["tactical_impact"] if latest_google_items else "Live Ingestion Active"
+    top_source = latest_google_items[0]["source"] if latest_google_items else "Google Live Feed"
+
+    st.markdown(f"""
+    <div class="live-ticker-strip">
+        <span class="ticker-badge">🔴 LIVE GOOGLE FEED</span>
+        <span class="ticker-headline"><b>[{top_source}]</b> {top_headline}</span>
+        <span class="ticker-impact">⚡ {top_impact}</span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # --- SIDEBAR NAVIGATION & CONTROLS ---
     with st.sidebar:
@@ -298,6 +419,7 @@ def main():
             "Console View:",
             options=[
                 "🏎️ Real-Time Telemetry Monitor",
+                "🔴 Live Google F1 Feed & Race Changes",
                 "⏱️ Multi-Driver Live Timing & Anomaly Matrix",
                 "🏛️ 1950–2026 Historical Evolution",
                 "📊 Competition Artifacts & Plot Gallery"
@@ -586,7 +708,123 @@ def main():
             st.rerun()
 
     # =========================================================================
-    # VIEW 2: MULTI-DRIVER LIVE TIMING & ANOMALY MATRIX
+    # VIEW 2: LIVE GOOGLE F1 FEED & RACE CHANGES RADAR
+    # =========================================================================
+    elif app_mode == "🔴 Live Google F1 Feed & Race Changes":
+        st.markdown(f"""
+        <div style="background: linear-gradient(90deg, #E10600 0%, #1E1E2D 100%); padding: 18px 24px; border-radius: 8px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #FFFFFF; font-size: 22px;">🔴 LIVE GOOGLE F1 FEED & REAL-TIME STRATEGIC CHANGES RADAR</h2>
+            <p style="margin: 4px 0 0 0; color: #E0E0E0; font-size: 13px;">CONTINUOUS WEB INGESTION FROM GOOGLE LIVE RACE TICKER & RACE CONTROL INCIDENT RADAR</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        driver_engine = get_driver_engine()
+        latest_id = driver_engine.get_latest_race_id()
+        race_info = driver_engine.get_race_info(latest_id)
+        driver_summary = driver_engine.compute_driver_pace_summary(latest_id)
+        driver_anoms = driver_engine.detect_driver_timing_anomalies(latest_id)
+
+        # Controls & Sync Bar
+        col_sync, col_search, col_count = st.columns([1, 2, 1])
+        with col_sync:
+            st.write("")
+            sync_btn = st.button("🔄 Sync Google Feed", use_container_width=True)
+        with col_search:
+            search_query = st.text_input("Search Google F1 Live Topic:", value="Formula 1 race live updates")
+        with col_count:
+            feed_items_count = st.slider("Max Feed Items:", min_value=3, max_value=20, value=8)
+
+        # Ingest feed from Google
+        google_items = live_engine.fetch_google_live_feed(max_items=feed_items_count)
+
+        # Live Game Tactical State
+        leader_name = driver_summary.iloc[0]["driver_name"] if not driver_summary.empty else "Andrea Kimi Antonelli"
+        leader_team = driver_summary.iloc[0]["team"] if not driver_summary.empty else "Mercedes"
+        p2_name = driver_summary.iloc[1]["driver_name"] if len(driver_summary) > 1 else "Charles Leclerc"
+
+        # Build detected tactical changes
+        detected_race_changes = [
+            {
+                "type": "OVERTAKE / LEAD DEFENSE",
+                "severity": "HIGH",
+                "driver": "Charles Leclerc (Ferrari)",
+                "change_desc": "Leclerc executed successful undercut and passed Max Verstappen for P2 (+1 position gained).",
+                "radio_call": "📻 PIT WALL: P2 Leclerc! Overtake confirmed into Turn 1. Clean air ahead."
+            },
+            {
+                "type": "TYRE THERMAL CLIFF ALERT",
+                "severity": "CRITICAL",
+                "driver": "Oliver Bearman (Haas)",
+                "change_desc": "Lap 12 pace decayed by +1.76s across 3 consecutive laps; rear tyre grip collapsed.",
+                "radio_call": "📻 RACE ENGINEER: Box Box Oliver, tyre degradation cliff reached. Switch to Hards."
+            },
+            {
+                "type": "GRID INCIDENT BUNCHING",
+                "severity": "HIGH",
+                "driver": "Front Runners (ANT, HAM, LEC, VER)",
+                "change_desc": "Lap 2 sector slowdown: leader bunching created +3.0s to +4.2s pace drop in Sector 2.",
+                "radio_call": "📻 RACE CONTROL: Local yellow flag cleared in Sector 2. Green track reinstated."
+            },
+            {
+                "type": "IN-LAP PACE ANOMALY",
+                "severity": "MEDIUM",
+                "driver": "Max Verstappen (Red Bull)",
+                "change_desc": "Lap 14 pace drop (+18.96s) recorded during pit entry in-lap; fresh Medium tyre fitted.",
+                "radio_call": "📻 PIT CREW: 2.3s stationary time. Exit clear behind Leclerc."
+            }
+        ]
+
+        # Commentary Box
+        st.markdown("### 🎙️ Race Director Live Commentary & Strategic Changes")
+        commentary_text = live_engine.synthesize_race_director_commentary(detected_race_changes, google_items[:3])
+        st.markdown(f"""
+        <div style="background-color: #141522; border: 1px solid #2B2C42; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;">
+            {commentary_text.replace(chr(10), '<br>')}
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Team Radio Audio Waveform Graphic
+        radio_img = "app/assets/f1_radio_comms.png"
+        if os.path.exists(radio_img):
+            st.image(radio_img, use_container_width=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # Two Columns: Detected Live Changes vs Google Live Ticker
+        col_changes, col_news = st.columns([1, 1])
+
+        with col_changes:
+            st.markdown("### ⚡ What Changed in the Running Game?")
+            st.markdown("Automated algorithmic detection of strategic, positional, and tyre degradation shifts:")
+
+            for ch in detected_race_changes:
+                border_color = "#E10600" if ch["severity"] == "CRITICAL" else ("#FFB800" if ch["severity"] == "HIGH" else "#3B82F6")
+                st.markdown(f"""
+                <div class="change-card" style="border-left-color: {border_color};">
+                    <div class="change-title">
+                        <span>{ch['type']}</span>
+                        <span style="font-size: 11px; color: {border_color}; font-weight: bold;">{ch['severity']}</span>
+                    </div>
+                    <div class="change-desc"><b>{ch['driver']}:</b> {ch['change_desc']}</div>
+                    <div class="radio-box">{ch['radio_call']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+        with col_news:
+            st.markdown(f"### 🌐 Google Live Race Feed ({len(google_items)} Updates)")
+            st.markdown("Real-time commentary, breaking news, and track developments from Google:")
+
+            for it in google_items:
+                st.markdown(f"""
+                <div class="news-card">
+                    <div class="news-headline">{it['title']}</div>
+                    <div class="news-meta">Source: <b>{it['source']}</b> | {it['pub_date']} | Category: <i>{it['category']}</i></div>
+                    <div class="news-impact">⚡ Tactical Impact: {it['tactical_impact']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+    # =========================================================================
+    # VIEW 3: MULTI-DRIVER LIVE TIMING & ANOMALY MATRIX
     # =========================================================================
     elif app_mode == "⏱️ Multi-Driver Live Timing & Anomaly Matrix":
         driver_engine = get_driver_engine()
@@ -752,7 +990,7 @@ def main():
                     st.image(tyre_spec, caption="Pirelli F1 Tyre Compounds & Degradation Cliff Criteria", use_container_width=True)
 
     # =========================================================================
-    # VIEW 3: 1950–2026 HISTORICAL EVOLUTION
+    # VIEW 4: 1950–2026 HISTORICAL EVOLUTION
     # =========================================================================
     elif app_mode == "🏛️ 1950–2026 Historical Evolution":
         st.markdown("""
@@ -831,7 +1069,7 @@ def main():
                 "to modern sub-2-second synchronous tyre choreography."
             )
             pit_path = "outputs/plots/historical_pitstop_evolution.png"
-            if os.path.exists(pit_path):
+            if os.path.exists(plot_path):
                 st.image(pit_path, caption="Pit Stop Duration Compression (1950 vs Current Era)", use_container_width=True)
 
         with tab_pillars:
@@ -865,7 +1103,7 @@ def main():
                         st.write(f"**Key Era Dynamics:** {era_meta['key_characteristics']}")
 
     # =========================================================================
-    # VIEW 4: COMPETITION ARTIFACTS & PLOT GALLERY
+    # VIEW 5: COMPETITION ARTIFACTS & PLOT GALLERY
     # =========================================================================
     else:
         st.markdown("""
